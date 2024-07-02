@@ -1,8 +1,7 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import "./App.css";
 import InputButton from "./components/InputButton";
 import InputCell from "./components/InputCell";
-import { v4 as uuidv4 } from "uuid";
 function App() {
   const [currInputNumber, setCurrInputNumber] = useState(-1);
 
@@ -12,7 +11,22 @@ function App() {
     <>
       <h1>Sudoku</h1>
 
-      <InputCell key={uuidv4()} currInputNumber={currInputNumber} />
+      {[...Array(9).keys()].map((j) => {
+        return (
+          <div className="sudoku-row" key={j}>
+            {[...Array(9).keys()].map((i) => {
+              return (
+                <InputCell
+                  key={i}
+                  row={j}
+                  col={i}
+                  currInputNumber={currInputNumber}
+                />
+              );
+            })}
+          </div>
+        );
+      })}
 
       <hr></hr>
       <p>{currInputNumber > 0 ? currInputNumber : "Select a num below"}</p>

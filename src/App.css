@@ -57,7 +57,7 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
-.input-num-cell {
+.sudoku-cell {
   width: 2em;
   height: 2em;
   border: 1px solid #eee;
@@ -70,4 +70,17 @@ input[type="number"] {
   color: black;
   background: #eee;
   font-weight: bold;
+}
+
+.sudoku-row {
+  display: flex;
+  justify-content: center;
+}
+
+.sudoku-cell.right-margin {
+  margin-right: 5px; /* Adjust the gap size as needed */
+}
+
+.sudoku-cell.bottom-margin {
+  margin-bottom: 5px; /* Adjust the gap size as needed */
 }
