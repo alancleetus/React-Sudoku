@@ -1,8 +1,5 @@
-# React + Vite
+### REACT Sudoku
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[![Netlify Status](https://api.netlify.com/api/v1/badges/8803b948-88a0-4c9b-bf21-b284401455bb/deploy-status)](https://app.netlify.com/sites/alan-c-react-sudoku/deploys)
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+[Try it](https://alan-c-react-sudoku.netlify.app/)
