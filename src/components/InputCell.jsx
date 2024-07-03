@@ -30,6 +30,7 @@ export default function InputCell({
     if (initialValue > 0) newClasses += " constant-value";
     setClasses(newClasses);
   }, [row, col, initialValue]);
+
   return (
     <div
       className={classes}
