@@ -84,3 +84,8 @@ input[type="number"] {
 .sudoku-cell.bottom-margin {
   margin-bottom: 5px; /* Adjust the gap size as needed */
 }
+
+.sudoku-cell.constant-value {
+  font-weight: bold;
+  background-color: #636363;
+}
