@@ -1,9 +1,8 @@
 import PropTypes from "prop-types";
-import { useEffect } from "react";
 
 export default function InputButton({ num, setCurrInputNumber, currInput }) {
   function onButtonClick(e) {
-    setCurrInputNumber(e.target.value);
+    setCurrInputNumber(parseInt(e.target.value));
   }
 
   // useEffect(() => {
@@ -14,7 +13,7 @@ export default function InputButton({ num, setCurrInputNumber, currInput }) {
   return (
     <button
       onClick={onButtonClick}
-      value={num}
+      value={num > 0 && num}
       className={currInput == num ? "num-button active" : "num-button"}
     >
       {num}
@@ -23,7 +22,7 @@ export default function InputButton({ num, setCurrInputNumber, currInput }) {
 }
 
 InputButton.propTypes = {
-  num: PropTypes.string.isRequired,
+  num: PropTypes.number.isRequired,
   setCurrInputNumber: PropTypes.func.isRequired,
   currInput: PropTypes.number.isRequired,
 };

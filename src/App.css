@@ -89,3 +89,7 @@ input[type="number"] {
   font-weight: bold;
   background-color: #636363;
 }
+
+.sudoku-cell.red {
+  color: red;
+}

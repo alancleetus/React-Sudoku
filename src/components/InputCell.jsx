@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function InputCell({
   currInputNumber,
@@ -13,20 +13,30 @@ export default function InputCell({
     initialValue > 0 ? initialValue : null
   );
 
+  const [classes, setClasses] = useState("sudoku-cell");
+
   function onClickCell() {
     if (initialValue == 0) {
-      handleCellValueChange(row, col, currInputNumber);
+      const validMove = handleCellValueChange(row, col, currInputNumber);
+      !validMove && setClasses((prev) => prev + " red");
       setCellValue(currInputNumber > 0 ? currInputNumber : null);
     }
   }
 
-  let classes = "sudoku-cell";
-  if (row === 2 || row === 5) classes = "sudoku-cell bottom-margin ";
-  if (col === 2 || col === 5) classes = classes + " right-margin ";
-  if (initialValue > 0) classes = classes + " constant-value";
-
+  useEffect(() => {
+    let newClasses = "sudoku-cell";
+    if (row === 2 || row === 5) newClasses += " bottom-margin";
+    if (col === 2 || col === 5) newClasses += " right-margin";
+    if (initialValue > 0) newClasses += " constant-value";
+    setClasses(newClasses);
+  }, [row, col, initialValue]);
   return (
-    <div className={classes} onClick={onClickCell}>
+    <div
+      className={classes}
+      onClick={onClickCell}
+      data-row={row}
+      data-col={col}
+    >
       <div>{cellValue}</div>
     </div>
   );
