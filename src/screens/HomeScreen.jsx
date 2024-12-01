@@ -1,12 +1,26 @@
 import PropTypes from "prop-types";
 import DifficultySelector from "../components/DifficultySelector";
-import { IoSettingsOutline } from "react-icons/io5";
 function HomeScreen({
   setGameDifficulty,
   switchScreen,
   startNewGame,
   resumeGame,
 }) {
+  const prevState = JSON.parse(localStorage.getItem("sudokuState"));
+  const resumeDiff = prevState.gameDifficulty;
+  const resumeTime = prevState.elapsedTime;
+
+  // Format elapsed time into mm:ss
+  const formatTime = (timeInSeconds) => {
+    const minutes = Math.floor(timeInSeconds / 60);
+    const seconds = timeInSeconds % 60;
+    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
+      2,
+      "0"
+    )}`;
+  };
+
+  console.log(prevState);
   return (
     <>
       <h1>Sudoku</h1>
@@ -14,14 +28,24 @@ function HomeScreen({
         setGameDifficulty={setGameDifficulty} // Pass setter to update difficulty
       />
       <div>
-        <button onClick={() => startNewGame()}>New Game</button>
+        <button className="home-screen-buttons" onClick={() => startNewGame()}>
+          New Game
+        </button>
       </div>
-
       <div>
-        <button onClick={() => resumeGame()}>Resume Game</button>
+        <button className="home-screen-buttons" onClick={() => resumeGame()}>
+          <span>Resume Game</span>
+          <br />
+          <span>
+            {resumeDiff} - {formatTime(resumeTime)}
+          </span>
+        </button>
       </div>
-      <button className="icon-button" onClick={() => switchScreen("settings")}>
-        <IoSettingsOutline />
+      <button
+        className="home-screen-buttons"
+        onClick={() => switchScreen("settings")}
+      >
+        Settings
       </button>
     </>
   );

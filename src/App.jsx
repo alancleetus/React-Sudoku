@@ -45,11 +45,13 @@ function App() {
   const loadGameState = () => {
     const savedState = JSON.parse(localStorage.getItem("sudokuState"));
     if (savedState) {
-      setGameDifficulty(savedState.difficulty);
+      setGameDifficulty(savedState.gameDifficulty);
       setElapsedTime(savedState.elapsedTime);
       setTimerActive(savedState.timerActive);
       setSudokuGrid(savedState.SudokuGrid);
       setSolutionGrid(savedState.SolutionGrid);
+      console.log("prev solution");
+      console.log(savedState.SolutionGrid);
       // If you want to restore the grid as well, you can load that here
     }
   };
