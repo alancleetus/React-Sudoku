@@ -95,3 +95,19 @@ input[type="number"] {
 .sudoku-cell.red {
   color: red;
 }
+
+.play-pause-button {
+  background-color: var(--primary-color); /* Adjust as per theme */
+  color: white;
+  border: none;
+  width: 36px; /* Typical FAB size */
+  height: 36px; /* Ensure it is a perfect circle */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5em; /* Size for the icon */
+  border-radius: 50%; /* Makes it a circle */
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  cursor: pointer;
+}
