@@ -20,9 +20,19 @@ export default function InputCell({
 
   function onClickCell() {
     if (initialValue === 0) {
+      // Handle valid or invalid move
       const validMove = handleCellValueChange(row, col, currInputNumber);
-      !validMove && setClasses((prev) => prev + " red");
-      setCellValue(currInputNumber > 0 ? currInputNumber : null);
+
+      if (currInputNumber === -1) setCellValue(null);
+      else setCellValue(currInputNumber);
+
+      setClasses((prev) =>
+        validMove
+          ? prev.replace(" red", "")
+          : prev.includes(" red")
+          ? prev
+          : prev + " red"
+      );
     }
   }
 

@@ -1,68 +1,46 @@
 import PropTypes from "prop-types";
-import { useState, useEffect } from "react";
-import GenerateSudoku from "./GenerateSudoku";
 import InputCell from "./InputCell";
 
-function GameGrid({ currInputNumber }) {
-  const [SudokuGrid, setSudokuGrid] = useState([
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  ]);
-
-  const [solveGrid, setSolveGrid] = useState(
-    SudokuGrid.map((row) => row.slice())
-  );
-  useEffect(() => {
-    const generateAndSetSudoku = async () => {
-      const generatedGrid = await GenerateSudoku("easy");
-      console.log("Generated Grid:");
-      console.log(generatedGrid);
-
-      setSudokuGrid(generatedGrid);
-      setSolveGrid(generatedGrid.map((row) => [...row]));
-    };
-
-    generateAndSetSudoku();
-  }, []);
-
-  function updateSolution(row, col, newValue) {
+function GameGrid({
+  SudokuGrid,
+  currInputNumber,
+  SolutionGrid,
+  setSolutionGrid,
+}) {
+  // Input value into cell
+  function updateSolutionGrid(row, col, newValue) {
     console.log("updating solution");
-    setSolveGrid((prevGrid) => {
+    setSolutionGrid((prevGrid) => {
       let newGrid = prevGrid.map((row) => [...row]); // Deep copy
       newGrid[row][col] = newValue;
       return newGrid;
     });
   }
 
+  // When inputting value, validate the value
   function handleCellValueChange(row, col, newValue) {
     //console.log({ row, col, newValue });
-    return validateNewCellValue({ row, col, newValue });
+
+    if (newValue > 0) return validateNewCellValue({ row, col, newValue });
+    else updateSolutionGrid(row, col, 0);
+    return true;
   }
 
   const validateNewCellValue = ({ row, col, newValue }) => {
     console.log("validateNewCellValue");
     //check each row for new value
-    const isInRow = solveGrid[row].find((i) => {
+    const isInRow = SolutionGrid[row].find((i) => {
       return i == newValue;
     })
       ? true
       : false;
 
     //check each col for new value
-    const isInCol = solveGrid
-      .map((eachRow) => {
-        return eachRow[col] == newValue;
-      })
-      .find((flag) => {
-        return flag === true;
-      })
+    const isInCol = SolutionGrid.map((eachRow) => {
+      return eachRow[col] == newValue;
+    }).find((flag) => {
+      return flag === true;
+    })
       ? true
       : false;
 
@@ -74,50 +52,52 @@ function GameGrid({ currInputNumber }) {
     let endingRow = startingRow + 2;
     let endingCol = startingCol + 2;
 
-    let isInGrid = false;
+    let isInQuadrant = false;
     // console.log(`${row},${col} `);
     // console.log(`${startingRow},${endingRow}, ${startingCol},${endingCol} `);
     for (let i = startingRow; i <= endingRow; i++) {
       for (let j = startingCol; j <= endingCol; j++) {
-        //console.log(solveGrid[i][j]);
-        if (solveGrid[i][j] == newValue) isInGrid = true;
+        //console.log(SolutionGrid[i][j]);
+        if (SolutionGrid[i][j] == newValue) isInQuadrant = true;
       }
     }
 
     isInRow && console.log(`${newValue} is in row`);
     isInCol && console.log(`${newValue} is in col`);
-    isInGrid && console.log(`${newValue} is in 3x3 grid`);
+    isInQuadrant && console.log(`${newValue} is in 3x3 grid`);
 
-    updateSolution(row, col, newValue);
+    updateSolutionGrid(row, col, newValue);
 
-    return !isInRow && !isInCol && !isInGrid;
+    return !isInRow && !isInCol && !isInQuadrant;
   };
 
   // useEffect(() => {
-  //   console.log(solveGrid);
-  // }, [solveGrid]);
+  //   console.log(SolutionGrid);
+  // }, [SolutionGrid]);
 
   return (
     <>
-      {/* returns [...Array(9).keys()] arr [1,2,..,9]*/}
-      {[...Array(9).keys()].map((i) => {
-        return (
-          <div className="sudoku-row" key={i}>
-            {[...Array(9).keys()].map((j) => {
-              return (
-                <InputCell
-                  key={"row" + i + "col" + j}
-                  row={i}
-                  col={j}
-                  initialValue={SudokuGrid[i][j]}
-                  currInputNumber={currInputNumber}
-                  handleCellValueChange={handleCellValueChange}
-                />
-              );
-            })}
-          </div>
-        );
-      })}
+      <div id="sudoku-game-grid">
+        {/* returns [...Array(9).keys()] arr [1,2,..,9]*/}
+        {[...Array(9).keys()].map((i) => {
+          return (
+            <div className="sudoku-row" key={i}>
+              {[...Array(9).keys()].map((j) => {
+                return (
+                  <InputCell
+                    key={"row" + i + "col" + j}
+                    row={i}
+                    col={j}
+                    initialValue={SudokuGrid[i][j]}
+                    currInputNumber={currInputNumber}
+                    handleCellValueChange={handleCellValueChange}
+                  />
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
     </>
   );
 }
@@ -126,4 +106,8 @@ export default GameGrid;
 
 GameGrid.propTypes = {
   currInputNumber: PropTypes.number.isRequired,
+  gameDifficulty: PropTypes.string.isRequired,
+  SudokuGrid: PropTypes.array.isRequired,
+  SolutionGrid: PropTypes.array,
+  setSolutionGrid: PropTypes.func.isRequired,
 };
