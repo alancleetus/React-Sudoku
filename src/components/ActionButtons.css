@@ -1,0 +1,39 @@
+.action-buttons > .active {
+  color: var(--primary-color); /* Active state for the 'Clear' button */
+}
+
+/* Flexbox layout for action buttons */
+.action-buttons {
+  display: flex;
+  justify-content: space-around; /* Spread buttons evenly */
+  gap: 15px;
+  margin-top: 20px;
+  background-color: var(--editable-cell-bg);
+  color: var(--text-color);
+  height: 50px;
+}
+
+.action-buttons button {
+  background-color: var(--editable-cell-bg);
+  color: var(--text-color);
+
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+}
+
+/* Individual button color customizations */
+.undo-button {
+  background-color: #007bff;
+  color: white;
+}
+
+.pencil-button {
+  background-color: #ffc107;
+  color: white;
+}
+
+.hint-button {
+  background-color: #28a745;
+  color: white;
+}

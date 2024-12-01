@@ -1,40 +1,55 @@
 import PropTypes from "prop-types";
 import InputButton from "./InputButton";
+import ActionButtons from "./ActionButtons"; // Import the new ActionButtons component
 
 function ButtonNumberContainer({ currInputNumber, setCurrInputNumber }) {
   const numList = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
   return (
     <>
-      <p>{currInputNumber > 0 ? currInputNumber : "Select a num below"}</p>
+      {/* Action Buttons Section */}
+      <ActionButtons
+        setCurrInputNumber={setCurrInputNumber}
+        currInputNumber={currInputNumber}
+      />
 
-      {numList.map((num) => {
-        return (
-          <InputButton
-            key={"button_" + num}
-            num={num}
-            setCurrInputNumber={setCurrInputNumber}
-            currInput={currInputNumber}
-          ></InputButton>
-        );
-      })}
-
-      <button
-        onClick={() => {
-          setCurrInputNumber(-1);
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "10px",
         }}
-        value={-1}
-        className={currInputNumber === -1 ? "num-button active" : "num-button"}
       >
-        clear
-      </button>
+        <div
+          id="number-buttons"
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "10px",
+            rowGap: "10px",
+            maxWidth: "300px",
+            justifyContent: "center",
+          }}
+        >
+          {numList.map((num) => {
+            return (
+              <InputButton
+                key={"button_" + num}
+                num={num}
+                setCurrInputNumber={setCurrInputNumber}
+                currInput={currInputNumber}
+              ></InputButton>
+            );
+          })}
+        </div>
+      </div>
     </>
   );
 }
-
-export default ButtonNumberContainer;
 
 ButtonNumberContainer.propTypes = {
   currInputNumber: PropTypes.number.isRequired,
   setCurrInputNumber: PropTypes.func.isRequired,
 };
+
+export default ButtonNumberContainer;
