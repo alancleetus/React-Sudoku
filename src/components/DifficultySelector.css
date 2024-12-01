@@ -1,0 +1,17 @@
+.difficulty-selector {
+  display: flex; /* Enables flexbox layout */
+  align-items: center; /* Vertically centers the items */
+  justify-content: center; /* Distributes space between the arrows and the text */
+}
+
+.difficulty-selector button {
+  flex-grow: 1;
+}
+
+.difficulty-selector span {
+  flex-grow: 2;
+  font-size: 1.5em; /* Keep the text size the same as the buttons */
+  text-align: center; /* Ensure text inside span is centered */
+  padding: 0 20px; /* Add horizontal padding to give space around the text */
+  color: var(--primary-color);
+}
