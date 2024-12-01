@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import InputCell from "./InputCell";
+import { useState } from "react";
 
 function GameGrid({
   SudokuGrid,
@@ -7,12 +8,87 @@ function GameGrid({
   SolutionGrid,
   setSolutionGrid,
 }) {
+  const [invalidCells, setInvalidCells] = useState(new Set()); // Track invalid cells
+
+  function revalidateSolutionGrid(updatedGrid) {
+    const newInvalidCells = new Set();
+
+    // Check rows and columns
+    for (let i = 0; i < 9; i++) {
+      const rowValues = {};
+      const colValues = {};
+      for (let j = 0; j < 9; j++) {
+        // Row validation
+        if (updatedGrid[i][j] > 0) {
+          if (rowValues[updatedGrid[i][j]]) {
+            newInvalidCells.add(`${i}-${j}`);
+            newInvalidCells.add(`${i}-${rowValues[updatedGrid[i][j]]}`);
+          } else {
+            rowValues[updatedGrid[i][j]] = j;
+          }
+        }
+
+        // Column validation
+        if (updatedGrid[j][i] > 0) {
+          if (colValues[updatedGrid[j][i]]) {
+            newInvalidCells.add(`${j}-${i}`);
+            newInvalidCells.add(`${colValues[updatedGrid[j][i]]}-${i}`);
+          } else {
+            colValues[updatedGrid[j][i]] = j;
+          }
+        }
+      }
+    }
+
+    // Check 3x3 grids
+    for (let blockRow = 0; blockRow < 3; blockRow++) {
+      for (let blockCol = 0; blockCol < 3; blockCol++) {
+        const blockValues = {};
+        for (let i = 0; i < 3; i++) {
+          for (let j = 0; j < 3; j++) {
+            const cellValue = updatedGrid[blockRow * 3 + i][blockCol * 3 + j];
+            if (cellValue > 0) {
+              const cellKey = `${blockRow * 3 + i}-${blockCol * 3 + j}`;
+              if (blockValues[cellValue]) {
+                newInvalidCells.add(cellKey);
+                newInvalidCells.add(blockValues[cellValue]);
+              } else {
+                blockValues[cellValue] = cellKey;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // Update invalid cells set
+    setInvalidCells(newInvalidCells);
+
+    // Apply visual updates
+    for (let i = 0; i < 9; i++) {
+      for (let j = 0; j < 9; j++) {
+        const cellKey = `${i}-${j}`;
+        const cellElement = document.querySelector(
+          `[data-row="${i}"][data-col="${j}"]`
+        );
+        if (cellElement) {
+          if (newInvalidCells.has(cellKey)) {
+            cellElement.classList.add("red");
+          } else {
+            cellElement.classList.remove("red");
+          }
+        }
+      }
+    }
+  }
+
   // Input value into cell
   function updateSolutionGrid(row, col, newValue) {
     console.log("updating solution");
     setSolutionGrid((prevGrid) => {
       let newGrid = prevGrid.map((row) => [...row]); // Deep copy
       newGrid[row][col] = newValue;
+      revalidateSolutionGrid(newGrid); // Revalidate after update
       return newGrid;
     });
   }

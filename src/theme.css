@@ -19,7 +19,7 @@
 [data-theme="dark"] {
   --bg-color: #23262e;
   --editable-cell-bg: #262a33;
-  --locked-cell-bg: #262a33;
+  --locked-cell-bg: #566175;
 
   --text-color: #ffffff;
   --editable-cell-text-color: var(--primary-color);
