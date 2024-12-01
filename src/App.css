@@ -60,16 +60,23 @@ input[type="number"] {
 .sudoku-cell {
   width: 2em;
   height: 2em;
+
   border: 1px solid #eee;
   padding: 3px;
   text-align: center;
   line-height: 2em;
 }
 
-.active {
-  color: black;
-  background: #eee;
+.sudoku-cell.locked-cell {
   font-weight: bold;
+  background-color: var(--locked-cell-bg);
+  color: var(--locked-cell-text-color);
+}
+
+.sudoku-cell.editable-cell {
+  font-weight: bold;
+  background-color: var(--editable-cell-bg);
+  color: var(--editable-cell-text-color);
 }
 
 .sudoku-row {
@@ -83,11 +90,6 @@ input[type="number"] {
 
 .sudoku-cell.bottom-margin {
   margin-bottom: 5px; /* Adjust the gap size as needed */
-}
-
-.sudoku-cell.constant-value {
-  font-weight: bold;
-  background-color: #636363;
 }
 
 .sudoku-cell.red {

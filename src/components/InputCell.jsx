@@ -27,7 +27,9 @@ export default function InputCell({
     let newClasses = "sudoku-cell";
     if (row === 2 || row === 5) newClasses += " bottom-margin";
     if (col === 2 || col === 5) newClasses += " right-margin";
-    if (initialValue > 0) newClasses += " constant-value";
+    if (initialValue > 0) newClasses += " locked-cell";
+    else newClasses += " editable-cell";
+
     setClasses(newClasses);
   }, [row, col, initialValue]);
 

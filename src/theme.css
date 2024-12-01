@@ -1,0 +1,89 @@
+/* Light mode theme*/
+[data-theme="light"] {
+  --bg-color: #f2f6ff;
+  --editable-cell-bg: #ffffff;
+  --locked-cell-bg: #ffffff;
+
+  --text-color: #000000;
+  --editable-cell-text-color: var(--primary-color);
+  --locked-cell-text-color: var(--text-color);
+  --gray-color: #e4ebf3;
+
+  --highlight-cell: #d4d7dc;
+  --highlight-row: #798090;
+  --primary-color: #12076d; /* Default primary color for light mode */
+  --secondary-color: #e8e6f1; /* Default secondary color for light mode */
+}
+
+/* Dark mode theme */
+[data-theme="dark"] {
+  --bg-color: #23262e;
+  --editable-cell-bg: #262a33;
+  --locked-cell-bg: #262a33;
+
+  --text-color: #ffffff;
+  --editable-cell-text-color: var(--primary-color);
+  --locked-cell-text-color: var(--text-color);
+  --gray-color: #2d3b56;
+
+  --highlight-cell: #d4d7dc;
+  --highlight-row: #798090;
+  --primary-color: #12076d; /* Default primary color for dark mode */
+  --secondary-color: #e8e6f1; /* Default secondary color for dark mode */
+}
+
+/* Custom color palettes */
+[data-color-scheme="green"] {
+  --primary-color: #01bb32;
+  --secondary-color: #e6f8ec;
+}
+
+[data-color-scheme="blue"] {
+  --primary-color: #0074ff;
+  --secondary-color: #e5f1ff;
+}
+
+[data-color-scheme="indigo"] {
+  --primary-color: #12076d;
+  --secondary-color: #e8e6f1;
+}
+
+[data-color-scheme="pink"] {
+  --primary-color: #e33c74;
+  --secondary-color: #ffebf0;
+}
+
+[data-color-scheme="teal"] {
+  --primary-color: #6dcfb8;
+  --secondary-color: #caefde;
+}
+
+[data-color-scheme="violet"] {
+  --primary-color: #a06cd0;
+  --secondary-color: #d7cbf1;
+}
+
+[data-color-scheme="lilac"] {
+  --primary-color: #e2a7da;
+  --secondary-color: #f2dff4;
+}
+
+[data-color-scheme="olive"] {
+  --primary-color: #808000;
+  --secondary-color: #f6eee1;
+}
+
+[data-color-scheme="scarlet"] {
+  --primary-color: #cf6b66;
+  --secondary-color: #f6e0e3;
+}
+
+[data-color-scheme="gray"] {
+  --primary-color: #5e6c7a;
+  --secondary-color: #eaebec;
+}
+
+[data-color-scheme="aquamarine"] {
+  --primary-color: #2cc3b0;
+  --secondary-color: #d0f4ed;
+}

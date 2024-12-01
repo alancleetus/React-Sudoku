@@ -1,0 +1,84 @@
+.theme-selector {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  align-items: center;
+}
+
+button.theme-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s ease;
+
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+  position: relative; /* Required for positioning the checkmark */
+}
+
+button.theme-btn.selected {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
+    rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+}
+
+button.theme-btn .checkmark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20px;
+  color: white;
+  font-weight: bold;
+  opacity: 0; /* Initially hidden */
+  transition: opacity 0.3s ease; /* Transition opacity for checkmark */
+}
+button.theme-btn.selected .checkmark {
+  opacity: 1; /* Show checkmark when selected */
+}
+/* Define colors for each theme */
+.theme-btn.scarlet {
+  background-color: #e2aba8;
+}
+
+.theme-btn.olive {
+  background-color: #e1dba7;
+}
+
+.theme-btn.aquamarine {
+  background-color: #2cc3b0;
+}
+
+.theme-btn.green {
+  background-color: #01bb32;
+}
+
+.theme-btn.blue {
+  background-color: #0074ff;
+}
+
+.theme-btn.indigo {
+  background-color: #12076d;
+}
+
+.theme-btn.violet {
+  background-color: #a06cd0;
+}
+
+.theme-btn.pink {
+  background-color: #e33c74;
+}
+
+.theme-btn.teal {
+  background-color: #6dcfb8;
+}
+
+.theme-btn.lilac {
+  background-color: #e2a7da;
+}
+
+.theme-btn.gray {
+  background-color: #5e6c7a;
+}
