@@ -3,6 +3,7 @@
   justify-content: center;
   gap: 1rem;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 button.theme-btn {
@@ -13,9 +14,7 @@ button.theme-btn {
   cursor: pointer;
   outline: none;
   transition: all 0.3s ease;
-
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-
   position: relative; /* Required for positioning the checkmark */
 }
 
@@ -30,7 +29,7 @@ button.theme-btn .checkmark {
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 20px;
-  color: white;
+  color: var(--secondary-color);
   font-weight: bold;
   opacity: 0; /* Initially hidden */
   transition: opacity 0.3s ease; /* Transition opacity for checkmark */

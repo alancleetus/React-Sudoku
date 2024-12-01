@@ -34,11 +34,27 @@ export default function ThemeSelector() {
 
   return (
     <div>
+      <h3>Choose Theme</h3>
       {/* Light/Dark Mode Toggle */}
-      <button onClick={() => setTheme("light")}>Light Mode</button>
-      <button onClick={() => setTheme("dark")}>Dark Mode</button>
 
-      <h3>Change theme</h3>
+      <div className="theme-selector">
+        <button
+          className={`theme-btn light ${theme === "light" ? "selected" : ""}`}
+          style={{ backgroundColor: `white` }}
+          onClick={() => setTheme("light")}
+        >
+          <span className="checkmark">✓</span>
+        </button>
+        <button
+          className={`theme-btn dark ${theme === "dark" ? "selected" : ""}`}
+          style={{ backgroundColor: `black` }}
+          onClick={() => setTheme("dark")}
+        >
+          <span className="checkmark">✓</span>
+        </button>
+      </div>
+
+      <h3>Choose Color Scheme</h3>
       <p>Select theme from below options</p>
       <div className="theme-selector">
         {themes.map(({ name, color }) => (
