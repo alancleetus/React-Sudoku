@@ -77,13 +77,13 @@ const generateSudokuGrid = () => {
 const hideValues = (SudokuGrid, difficulty) => {
   let cellsToHide;
   switch (difficulty) {
-    case "easy":
-      cellsToHide = 20; // Easy: Hide 20 cells
+    case "Easy":
+      cellsToHide = 25; // Easy: Hide 25 cells
       break;
-    case "medium":
+    case "Medium":
       cellsToHide = 40; // Medium: Hide 40 cells
       break;
-    case "hard":
+    case "Hard":
       cellsToHide = 60; // Hard: Hide 60 cells
       break;
     default:
