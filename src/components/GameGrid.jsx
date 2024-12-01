@@ -1,24 +1,49 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
-import SudokuGrid from "./ExampleGrid";
+import { useState, useEffect } from "react";
+import GenerateSudoku from "./GenerateSudoku";
 import InputCell from "./InputCell";
 
 function GameGrid({ currInputNumber }) {
+  const [SudokuGrid, setSudokuGrid] = useState([
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  ]);
+
   const [solveGrid, setSolveGrid] = useState(
     SudokuGrid.map((row) => row.slice())
   );
-  function handleCellValueChange(row, col, newValue) {
-    //console.log({ row, col, newValue });
-    return validateNewCellValue({ row, col, newValue });
-  }
+  useEffect(() => {
+    const generateAndSetSudoku = async () => {
+      const generatedGrid = await GenerateSudoku("easy");
+      console.log("Generated Grid:");
+      console.log(generatedGrid);
+
+      setSudokuGrid(generatedGrid);
+      setSolveGrid(generatedGrid.map((row) => [...row]));
+    };
+
+    generateAndSetSudoku();
+  }, []);
 
   function updateSolution(row, col, newValue) {
     console.log("updating solution");
     setSolveGrid((prevGrid) => {
-      let newGrid = prevGrid;
+      let newGrid = prevGrid.map((row) => [...row]); // Deep copy
       newGrid[row][col] = newValue;
       return newGrid;
     });
+  }
+
+  function handleCellValueChange(row, col, newValue) {
+    //console.log({ row, col, newValue });
+    return validateNewCellValue({ row, col, newValue });
   }
 
   const validateNewCellValue = ({ row, col, newValue }) => {

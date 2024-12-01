@@ -13,10 +13,13 @@ export default function InputCell({
     initialValue > 0 ? initialValue : null
   );
 
+  useEffect(() => {
+    setCellValue(initialValue > 0 ? initialValue : null);
+  }, [initialValue]);
   const [classes, setClasses] = useState("sudoku-cell");
 
   function onClickCell() {
-    if (initialValue == 0) {
+    if (initialValue === 0) {
       const validMove = handleCellValueChange(row, col, currInputNumber);
       !validMove && setClasses((prev) => prev + " red");
       setCellValue(currInputNumber > 0 ? currInputNumber : null);
