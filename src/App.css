@@ -74,7 +74,7 @@ input[type="number"] {
 }
 
 .sudoku-cell.editable-cell {
-  font-weight: bold;
+  /* font-weight: bold; */
   background-color: var(--editable-cell-bg);
   color: var(--editable-cell-text-color);
 }
@@ -93,7 +93,8 @@ input[type="number"] {
 }
 
 .sudoku-cell.red {
-  color: red;
+  background-color: red;
+  color: white;
 }
 
 .play-pause-button {

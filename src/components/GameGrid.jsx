@@ -3,8 +3,8 @@ import InputCell from "./InputCell";
 import { useState } from "react";
 
 function GameGrid({
-  SudokuGrid,
   currInputNumber,
+  SudokuGrid,
   SolutionGrid,
   setSolutionGrid,
 }) {
