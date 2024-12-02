@@ -7,8 +7,8 @@ function HomeScreen({
   resumeGame,
 }) {
   const prevState = JSON.parse(localStorage.getItem("sudokuState"));
-  const resumeDiff = prevState.gameDifficulty;
-  const resumeTime = prevState.elapsedTime;
+  const resumeDiff = prevState ? prevState.gameDifficulty : "";
+  const resumeTime = prevState ? prevState.elapsedTime : "";
 
   // Format elapsed time into mm:ss
   const formatTime = (timeInSeconds) => {
@@ -20,7 +20,6 @@ function HomeScreen({
     )}`;
   };
 
-  console.log(prevState);
   return (
     <>
       <h1>Sudoku</h1>
@@ -37,7 +36,9 @@ function HomeScreen({
           <span>Resume Game</span>
           <br />
           <span>
-            {resumeDiff} - {formatTime(resumeTime)}
+            {resumeDiff !== ""
+              ? `${resumeDiff} - ${formatTime(resumeTime)}`
+              : ""}{" "}
           </span>
         </button>
       </div>
