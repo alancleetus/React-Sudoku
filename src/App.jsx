@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
-import "./App.css";
-import "./theme.css";
+import "./assets/styles/App.css";
+import "./assets/styles/theme.css";
 
-import SettingsPage from "./components/SettingsPage";
-import { BsArrowLeftShort } from "react-icons/bs";
+import SettingsScreen from "./screens/SettingsScreen";
 import HomeScreen from "./screens/HomeScreen";
 import DifficultySelector from "./components/DifficultySelector";
 import GameScreen from "./screens/GameScreen";
 import GenerateSudoku from "./components/GenerateSudoku";
+
+import { EmptyGrid } from "./constants/sudokuConstants";
 function App() {
   const [elapsedTime, setElapsedTime] = useState(0); // Timer state
   const [timerActive, setTimerActive] = useState(false); // Track if the timer is running
@@ -17,29 +18,9 @@ function App() {
   const [currentScreen, setCurrentScreen] = useState("home"); // Manage which screen to display
   const [previousScreen, setPreviousScreen] = useState("home"); // Manage which screen to display
 
-  const [SudokuGrid, setSudokuGrid] = useState([
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  ]);
+  const [SudokuGrid, setSudokuGrid] = useState(EmptyGrid);
 
-  const [SolutionGrid, setSolutionGrid] = useState([
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  ]);
+  const [SolutionGrid, setSolutionGrid] = useState(EmptyGrid);
 
   // Load game state from localStorage (if any)
   const loadGameState = () => {
@@ -158,22 +139,9 @@ function App() {
           />
         )}
         {currentScreen === "settings" && (
-          <>
-            <div style={{ display: "flex" }}>
-              <button
-                className="icon-button"
-                onClick={() => switchScreen(previousScreen)}
-                style={{ flexGrow: "1" }}
-              >
-                <BsArrowLeftShort />
-              </button>
-              <div style={{ flexGrow: "3" }}></div>
-
-              <div style={{ flexGrow: "1" }}></div>
-            </div>
-
-            <SettingsPage />
-          </>
+          <SettingsScreen
+            handleBackButton={() => switchScreen(previousScreen)}
+          />
         )}
         {currentScreen === "difficulty" && <DifficultySelector />}
       </div>

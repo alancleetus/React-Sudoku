@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
-import "./theme.css";
-import "./index.css";
+import "./assets/styles/theme.css";
+import "./assets/styles/index.css";
 
 function loadTheme() {
   const savedTheme = localStorage.getItem("theme") || "light"; // Default to light theme

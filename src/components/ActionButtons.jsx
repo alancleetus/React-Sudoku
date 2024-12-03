@@ -6,7 +6,7 @@ import { AiOutlineClear } from "react-icons/ai";
 import { LiaUndoAltSolid } from "react-icons/lia";
 import { GoPencil } from "react-icons/go";
 import { HiMagnifyingGlass } from "react-icons/hi2";
-import "./ActionButtons.css";
+import "../assets/styles/ActionButtons.css";
 
 function ActionButtons({ setCurrInputNumber, currInputNumber }) {
   return (

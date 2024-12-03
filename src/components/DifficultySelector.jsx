@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "./DifficultySelector.css";
+import "../assets/styles/DifficultySelector.css";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import PropTypes from "prop-types";
