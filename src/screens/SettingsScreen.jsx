@@ -1,13 +1,14 @@
 import { BsArrowLeftShort } from "react-icons/bs";
 import ThemeSelector from "../components/ThemeSelector";
-import PropTypes from "prop-types";
-function SettingsScreen({ handleBackButton }) {
+import { useScreenContext } from "../contexts/ScreenContext";
+function SettingsScreen() {
+  const { handleBackButton } = useScreenContext();
   return (
     <>
       <div style={{ display: "flex" }}>
         <button
           className="icon-button"
-          onClick={() => handleBackButton()}
+          onClick={handleBackButton}
           style={{ flexGrow: "1" }}
         >
           <BsArrowLeftShort />
@@ -21,7 +22,4 @@ function SettingsScreen({ handleBackButton }) {
   );
 }
 
-SettingsScreen.propTypes = {
-  handleBackButton: PropTypes.func.isRequired,
-};
 export default SettingsScreen;

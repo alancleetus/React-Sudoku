@@ -5,11 +5,6 @@ export default function InputButton({ num, setCurrInputNumber, currInput }) {
     setCurrInputNumber(parseInt(e.target.value));
   }
 
-  // useEffect(() => {
-  //   console.log("num:" + num);
-  //   console.log("currInput:" + currInput);
-  //   console.log(currInput == num);
-  // }, [num, currInput]);
   return (
     <button
       onClick={onButtonClick}

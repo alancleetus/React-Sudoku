@@ -1,11 +1,9 @@
-import PropTypes from "prop-types";
-import DifficultySelector from "../components/DifficultySelector";
-function HomeScreen({
-  setGameDifficulty,
-  switchScreen,
-  startNewGame,
-  resumeGame,
-}) {
+import DifficultySelector from "../components/DifficultyComponent";
+import { useScreenContext } from "../contexts/ScreenContext";
+import { useSudokuContext } from "../contexts/SudokuProvider";
+function HomeScreen() {
+  const { handleSettingsClick } = useScreenContext();
+  const { startNewGame, resumeGame } = useSudokuContext();
   const prevState = JSON.parse(localStorage.getItem("sudokuState"));
   const resumeDiff = prevState ? prevState.gameDifficulty : "";
   const resumeTime = prevState ? prevState.elapsedTime : "";
@@ -23,9 +21,7 @@ function HomeScreen({
   return (
     <>
       <h1>Sudoku</h1>
-      <DifficultySelector
-        setGameDifficulty={setGameDifficulty} // Pass setter to update difficulty
-      />
+      <DifficultySelector />
       <div>
         <button className="home-screen-buttons" onClick={() => startNewGame()}>
           New Game
@@ -42,20 +38,11 @@ function HomeScreen({
           </span>
         </button>
       </div>
-      <button
-        className="home-screen-buttons"
-        onClick={() => switchScreen("settings")}
-      >
+      <button className="home-screen-buttons" onClick={handleSettingsClick}>
         Settings
       </button>
     </>
   );
 }
 
-HomeScreen.propTypes = {
-  setGameDifficulty: PropTypes.func.isRequired,
-  switchScreen: PropTypes.func.isRequired,
-  startNewGame: PropTypes.func.isRequired,
-  resumeGame: PropTypes.func.isRequired,
-};
 export default HomeScreen;

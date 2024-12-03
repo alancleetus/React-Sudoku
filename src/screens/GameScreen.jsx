@@ -1,30 +1,27 @@
-import PropTypes from "prop-types";
 import { BsArrowLeftShort } from "react-icons/bs";
 import { IoIosPause } from "react-icons/io";
 import { IoIosPlay } from "react-icons/io";
 import { IoSettingsOutline } from "react-icons/io5";
 import GameGrid from "../components/GameGrid";
 import ButtonNumberContainer from "../components/ButtonNumberContainer";
+import TimerComponent from "../components/TimerComponent";
+import { useTimerContext } from "../contexts/TimerContext";
+import { useScreenContext } from "../contexts/ScreenContext";
+import { useGameDifficultyContext } from "../contexts/GameDifficultyProvider";
+import { useSudokuContext } from "../contexts/SudokuProvider";
 
-function GameScreen({
-  currInputNumber,
-  setCurrInputNumber,
-  gameDifficulty,
-  switchScreen,
-  timerActive,
-  setTimerActive,
-  formatTime,
-  elapsedTime,
-  SudokuGrid,
-  SolutionGrid,
-  setSolutionGrid,
-}) {
+function GameScreen() {
+  const { isTimerActive, toggleTimer } = useTimerContext();
+  const { handleHomeClick, handleSettingsClick } = useScreenContext();
+  const { gameDifficulty } = useGameDifficultyContext();
+  const { currInputNumber, setCurrInputNumber } = useSudokuContext();
+
   return (
     <div>
       <div style={{ display: "flex" }}>
         <button
           className="icon-button"
-          onClick={() => switchScreen("home")}
+          onClick={handleHomeClick}
           style={{ flexGrow: "1", textAlign: "left" }}
         >
           <BsArrowLeftShort />
@@ -32,7 +29,7 @@ function GameScreen({
         <div style={{ flexGrow: "3" }}></div>
         <button
           className="icon-button"
-          onClick={() => switchScreen("settings")}
+          onClick={handleSettingsClick}
           style={{ flexGrow: "1", textAlign: "right" }}
         >
           <IoSettingsOutline />
@@ -42,7 +39,7 @@ function GameScreen({
       <div style={{ display: "flex", alignItems: "baseline" }}>
         <p style={{ flexGrow: "1", textAlign: "left" }}>{gameDifficulty}</p>
         <p style={{ flexGrow: "2", textAlign: "center" }}>
-          {formatTime(elapsedTime)}
+          <TimerComponent />
         </p>
         <div
           style={{
@@ -51,20 +48,14 @@ function GameScreen({
             justifyContent: "flex-end",
           }}
         >
-          <button
-            className="play-pause-button"
-            onClick={() => setTimerActive(!timerActive)}
-          >
-            {timerActive ? <IoIosPause /> : <IoIosPlay />}
+          <button className="play-pause-button" onClick={() => toggleTimer}>
+            {isTimerActive ? <IoIosPause /> : <IoIosPlay />}
           </button>
         </div>
       </div>
       <GameGrid
         currInputNumber={currInputNumber}
         gameDifficulty={gameDifficulty}
-        SudokuGrid={SudokuGrid}
-        SolutionGrid={SolutionGrid}
-        setSolutionGrid={setSolutionGrid}
       />
       <ButtonNumberContainer
         currInputNumber={currInputNumber}
@@ -73,18 +64,4 @@ function GameScreen({
     </div>
   );
 }
-
-GameScreen.propTypes = {
-  currInputNumber: PropTypes.number.isRequired,
-  setCurrInputNumber: PropTypes.func.isRequired,
-  gameDifficulty: PropTypes.string.isRequired,
-  switchScreen: PropTypes.func.isRequired,
-  timerActive: PropTypes.bool.isRequired,
-  setTimerActive: PropTypes.func.isRequired,
-  formatTime: PropTypes.func.isRequired,
-  elapsedTime: PropTypes.number.isRequired,
-  SudokuGrid: PropTypes.array.isRequired,
-  SolutionGrid: PropTypes.array,
-  setSolutionGrid: PropTypes.func.isRequired,
-};
 export default GameScreen;

@@ -1,26 +1,10 @@
-// GenerateSudoku.js
-const validateNewCellValue = (SudokuGrid, row, col, newValue) => {
-  // Check row
-  if (SudokuGrid[row].includes(newValue)) return false;
+// GenerateSudoku.jsx
 
-  // Check column
-  for (let i = 0; i < 9; i++) {
-    if (SudokuGrid[i][col] === newValue) return false;
-  }
+import { EmptyGrid } from "../constants/sudokuConstants";
+import { validateNewCellValue } from "./SudokuValidator";
 
-  // Check 3x3 grid
-  const startRow = Math.floor(row / 3) * 3;
-  const startCol = Math.floor(col / 3) * 3;
-
-  for (let i = startRow; i < startRow + 3; i++) {
-    for (let j = startCol; j < startCol + 3; j++) {
-      if (SudokuGrid[i][j] === newValue) return false;
-    }
-  }
-
-  return true;
-};
-
+// Recursively fills a Sudoku grid using a backtracking algorithm.
+// This function ensures that the grid is completely and correctly filled.
 const fillSudoku = (SudokuGrid) => {
   for (let row = 0; row < 9; row++) {
     for (let col = 0; col < 9; col++) {
@@ -43,6 +27,8 @@ const fillSudoku = (SudokuGrid) => {
   return true;
 };
 
+// Shuffles an array in-place using the Fisher-Yates algorithm.
+// This is used to randomize the order of numbers for Sudoku generation.
 const shuffleArray = (array) => {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -51,17 +37,7 @@ const shuffleArray = (array) => {
 };
 
 const generateSudokuGrid = () => {
-  const SudokuGrid = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  ];
+  const SudokuGrid = EmptyGrid;
 
   while (!fillSudoku(SudokuGrid)) {
     for (let row = 0; row < 9; row++) {
@@ -74,6 +50,8 @@ const generateSudokuGrid = () => {
   return SudokuGrid;
 };
 
+// Hides values in a Sudoku grid based on the specified difficulty level
+// to create the puzzle by replacing cells with 0 (empty).
 const hideValues = (SudokuGrid, difficulty) => {
   let cellsToHide;
   switch (difficulty) {
@@ -102,6 +80,8 @@ const hideValues = (SudokuGrid, difficulty) => {
   return SudokuGrid;
 };
 
+// Main function to generate a Sudoku puzzle.
+// Creates a fully solved Sudoku grid and then hides values based on the difficulty level.
 const GenerateSudoku = (difficulty) => {
   const fullGrid = generateSudokuGrid();
   const puzzleGrid = hideValues(fullGrid, difficulty);

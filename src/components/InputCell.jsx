@@ -1,14 +1,12 @@
 import PropTypes from "prop-types";
 
 import { useState, useEffect } from "react";
+import { useSudokuContext } from "../contexts/SudokuProvider";
 
-export default function InputCell({
-  currInputNumber,
-  row,
-  col,
-  initialValue,
-  handleCellValueChange,
-}) {
+export default function InputCell({ row, col }) {
+  const { sudokuGrid, updateCell, currInputNumber } = useSudokuContext();
+
+  const initialValue = sudokuGrid[row][col];
   const [cellValue, setCellValue] = useState(
     initialValue > 0 ? initialValue : null
   );
@@ -21,7 +19,7 @@ export default function InputCell({
   function onClickCell() {
     if (initialValue === 0) {
       // Handle valid or invalid move
-      const validMove = handleCellValueChange(row, col, currInputNumber);
+      const validMove = updateCell(row, col, currInputNumber);
 
       if (currInputNumber === -1) setCellValue(null);
       else setCellValue(currInputNumber);
@@ -59,9 +57,6 @@ export default function InputCell({
 }
 
 InputCell.propTypes = {
-  currInputNumber: PropTypes.number.isRequired,
   row: PropTypes.number.isRequired,
   col: PropTypes.number.isRequired,
-  initialValue: PropTypes.number.isRequired,
-  handleCellValueChange: PropTypes.func.isRequired,
 };
