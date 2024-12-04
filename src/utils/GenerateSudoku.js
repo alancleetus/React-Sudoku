@@ -37,7 +37,7 @@ const shuffleArray = (array) => {
 };
 
 const generateSudokuGrid = () => {
-  const SudokuGrid = EmptyGrid;
+  const SudokuGrid = EmptyGrid();
 
   while (!fillSudoku(SudokuGrid)) {
     for (let row = 0; row < 9; row++) {

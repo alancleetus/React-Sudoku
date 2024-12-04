@@ -21,7 +21,6 @@ export const validateNewCellValue = (SudokuGrid, row, col, newValue) => {
 };
 
 export const validateSudokuGrid = (SudokuGrid) => {
-  const invalidCellsArr = [];
   const newInvalidCellsSet = new Set();
 
   // Check rows and columns
@@ -72,51 +71,5 @@ export const validateSudokuGrid = (SudokuGrid) => {
     }
   }
 
-  // Update invalid cells set
-  invalidCellsArr.push(newInvalidCellsSet);
-
-  return invalidCellsArr;
+  return newInvalidCellsSet;
 };
-
-// const validateNewCellValue = ({ row, col, newValue }) => {
-//   console.log("validateNewCellValue");
-//   //check each row for new value
-//   const isInRow = SolutionGrid[row].find((i) => {
-//     return i == newValue;
-//   })
-//     ? true
-//     : false;
-
-//   //check each col for new value
-//   const isInCol = SolutionGrid.map((eachRow) => {
-//     return eachRow[col] == newValue;
-//   }).find((flag) => {
-//     return flag === true;
-//   })
-//     ? true
-//     : false;
-
-//   // check if new value in 3x3 grid
-
-//   let startingRow = Math.floor(row / 3) * 3;
-//   let startingCol = Math.floor(col / 3) * 3;
-
-//   let endingRow = startingRow + 2;
-//   let endingCol = startingCol + 2;
-
-//   let isInQuadrant = false;
-//   // console.log(`${row},${col} `);
-//   // console.log(`${startingRow},${endingRow}, ${startingCol},${endingCol} `);
-//   for (let i = startingRow; i <= endingRow; i++) {
-//     for (let j = startingCol; j <= endingCol; j++) {
-//       //console.log(SolutionGrid[i][j]);
-//       if (SolutionGrid[i][j] == newValue) isInQuadrant = true;
-//     }
-//   }
-
-//   isInRow && console.log(`${newValue} is in row`);
-//   isInCol && console.log(`${newValue} is in col`);
-//   isInQuadrant && console.log(`${newValue} is in 3x3 grid`);
-
-//   return !isInRow && !isInCol && !isInQuadrant;
-// };

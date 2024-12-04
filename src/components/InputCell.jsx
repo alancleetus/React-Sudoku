@@ -4,20 +4,34 @@ import { useState, useEffect } from "react";
 import { useSudokuContext } from "../contexts/SudokuProvider";
 
 export default function InputCell({ row, col }) {
-  const { sudokuGrid, updateCell, currInputNumber } = useSudokuContext();
+  const { sudokuGrid, solutionGrid, updateCell, currInputNumber } =
+    useSudokuContext();
 
-  const initialValue = sudokuGrid[row][col];
-  const [cellValue, setCellValue] = useState(
-    initialValue > 0 ? initialValue : null
-  );
+  const initialValue = sudokuGrid[row][col]
+    ? sudokuGrid[row][col]
+    : solutionGrid[row][col] > 0
+    ? solutionGrid[row][col]
+    : null;
+  const [cellValue, setCellValue] = useState(initialValue);
 
   useEffect(() => {
     setCellValue(initialValue > 0 ? initialValue : null);
   }, [initialValue]);
+
   const [classes, setClasses] = useState("sudoku-cell");
 
   function onClickCell() {
-    if (initialValue === 0) {
+    console.log(
+      "onClickCell: row(" +
+        row +
+        ") col(" +
+        col +
+        ") currInputNumber (" +
+        currInputNumber +
+        ")"
+    );
+
+    if (sudokuGrid[row][col] === 0) {
       // Handle valid or invalid move
       const validMove = updateCell(row, col, currInputNumber);
 
@@ -25,7 +39,7 @@ export default function InputCell({ row, col }) {
       else setCellValue(currInputNumber);
 
       setClasses((prev) =>
-        validMove
+        validMove || currInputNumber === -1
           ? prev.replace(" red", "")
           : prev.includes(" red")
           ? prev
@@ -38,11 +52,11 @@ export default function InputCell({ row, col }) {
     let newClasses = "sudoku-cell";
     if (row === 2 || row === 5) newClasses += " bottom-margin";
     if (col === 2 || col === 5) newClasses += " right-margin";
-    if (initialValue > 0) newClasses += " locked-cell";
+    if (sudokuGrid[row][col] > 0) newClasses += " locked-cell";
     else newClasses += " editable-cell";
 
     setClasses(newClasses);
-  }, [row, col, initialValue]);
+  }, [row, col, sudokuGrid]);
 
   return (
     <div

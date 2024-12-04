@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { validateSudokuGrid } from "../utils/SudokuValidator";
 import { EmptyGrid } from "../constants/sudokuConstants";
 import { createContext, useContext } from "react";
@@ -15,14 +15,51 @@ export const SudokuProvider = ({ children }) => {
   const { switchScreen } = useScreenContext();
   const [currInputNumber, setCurrInputNumber] = useState(-1);
 
-  const [sudokuGrid, setSudokuGrid] = useState(EmptyGrid);
-  const [solutionGrid, setSolutionGrid] = useState(EmptyGrid);
+  const [sudokuGrid, setSudokuGrid] = useState(() => EmptyGrid());
+  const [solutionGrid, setSolutionGrid] = useState(() => EmptyGrid());
+
+  const [invalidCells, setInvalidCells] = useState(new Set()); // Track invalid cells
 
   const updateCell = (row, col, value) => {
-    const newGrid = [...sudokuGrid];
+    console.log("updating cell");
+
+    const newGrid = [...solutionGrid];
     newGrid[row][col] = value;
+
     setSolutionGrid(newGrid);
     validateSudokuGrid(solutionGrid, row, col, value);
+
+    setInvalidCells(validateSudokuGrid(newGrid)); // Revalidate after update
+  };
+  useEffect(() => {
+    markInvalidCells();
+  }, [invalidCells]);
+
+  const markInvalidCells = () => {
+    console.log("markInvalidCells");
+    console.log("invalidCells" + invalidCells);
+
+    // Apply visual updates
+    for (let i = 0; i < 9; i++) {
+      for (let j = 0; j < 9; j++) {
+        const cellKey = `${i}-${j}`;
+        console.log("Checking cellKey:" + cellKey);
+
+        const cellElement = document.querySelector(
+          `[data-row="${i}"][data-col="${j}"]`
+        );
+
+        if (cellElement) {
+          if (invalidCells.has(cellKey)) {
+            console.log("found");
+            cellElement.classList.add("red");
+          } else {
+            console.log("not found");
+            cellElement.classList.remove("red");
+          }
+        }
+      }
+    }
   };
 
   // Start a new game
@@ -47,6 +84,9 @@ export const SudokuProvider = ({ children }) => {
   const resumeGame = () => {
     loadGameState();
     switchScreen("game");
+
+    console.log(sudokuGrid);
+    console.log(solutionGrid);
   };
 
   // Load game state from localStorage (if any)
