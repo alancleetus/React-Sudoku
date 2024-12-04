@@ -13,7 +13,10 @@ export const SudokuProvider = ({ children }) => {
   const { resetTimer, updateTimer } = useTimerContext();
   const { gameDifficulty, updateGameDifficulty } = useGameDifficultyContext();
   const { switchScreen } = useScreenContext();
-  const [currInputNumber, setCurrInputNumber] = useState(-1);
+
+  const [currInputNumber, setCurrInputNumber] = useState(-1); // Active number (-1 means none)
+  const [activeCell, setActiveCell] = useState(null); // Active cell (null means none)
+  const [inputMode, setInputMode] = useState("noInput"); // Modes: "noInput", "numberFirst", "cellFirst"
 
   const [sudokuGrid, setSudokuGrid] = useState(() => EmptyGrid());
   const [solutionGrid, setSolutionGrid] = useState(() => EmptyGrid());
@@ -21,29 +24,128 @@ export const SudokuProvider = ({ children }) => {
   const [invalidCells, setInvalidCells] = useState(new Set()); // Track invalid cells
 
   const updateCell = (row, col, value) => {
-    console.log("updating cell");
+    console.log("updating solution");
+    console.log("row:" + row + ", col:" + col + ", val:" + value);
 
     const newGrid = [...solutionGrid];
     newGrid[row][col] = value;
 
     setSolutionGrid(newGrid);
-    validateSudokuGrid(solutionGrid, row, col, value);
 
+    validateSudokuGrid(solutionGrid, row, col, value);
     setInvalidCells(validateSudokuGrid(newGrid)); // Revalidate after update
   };
+
+  const handleNumberClick = (num) => {
+    console.log("Handle Number Click:" + num);
+    if (inputMode === "numberFirst" && currInputNumber === num) {
+      // Deactivate number-first mode if the same number is clicked again
+      resetInputMode();
+    } else if (
+      inputMode === "noInput" ||
+      (inputMode === "numberFirst" && currInputNumber !== num)
+    ) {
+      // Switch to number mode and update number
+      setCurrInputNumber(num);
+      setActiveCell(null); // Deactivate any active cell
+      setInputMode("numberFirst");
+    } else if (inputMode === "cellFirst") {
+      // In cell-first mode, update the cell immediately
+      updateCell(activeCell.row, activeCell.col, num);
+    }
+  };
+
+  const handleCellClick = (row, col) => {
+    console.log("handleCellClick");
+    if (sudokuGrid[row][col] > 0) {
+      resetInputMode();
+      return;
+    }
+    const isSameCell =
+      activeCell && activeCell.row === row && activeCell.col === col;
+
+    if (inputMode === "cellFirst" && isSameCell) {
+      // Deactivate cell-first mode if the same cell is clicked again
+      resetInputMode();
+    } else if (inputMode === "cellFirst" && !isSameCell) {
+      const cellElement = document.querySelector(
+        `[data-row="${activeCell.row}"][data-col="${activeCell.col}"]`
+      );
+
+      if (cellElement) {
+        cellElement.classList.remove("active-cell");
+      }
+      // Change active cell
+      setActiveCell({ row, col });
+    } else if (inputMode === "numberFirst") {
+      // In number-first mode, update the cell immediately
+      const cellElement = document.querySelector(
+        `[data-row="${row}"][data-col="${col}"]`
+      );
+
+      if (cellElement.innerText == currInputNumber) {
+        updateCell(row, col, 0);
+      } else updateCell(row, col, currInputNumber);
+    } else {
+      // Otherwise, activate the cell-first mode
+      setActiveCell({ row, col });
+      setCurrInputNumber(-1); // Deactivate any active number
+      setInputMode("cellFirst");
+    }
+  };
+
+  const resetInputMode = () => {
+    setInputMode("noInput");
+    setCurrInputNumber(-1);
+    setActiveCell(null);
+  };
+
   useEffect(() => {
     markInvalidCells();
   }, [invalidCells]);
 
+  useEffect(() => {
+    markActiveCell();
+  }, [activeCell]);
+
+  useEffect(() => {
+    console.log("inputMode:" + inputMode);
+  }, [inputMode]);
+
+  const markActiveCell = () => {
+    if (activeCell) {
+      const cellElement = document.querySelector(
+        `[data-row="${activeCell.row}"][data-col="${activeCell.col}"]`
+      );
+
+      if (cellElement) {
+        cellElement.classList.add("active-cell");
+      }
+    } else {
+      // Apply visual updates
+      for (let i = 0; i < 9; i++) {
+        for (let j = 0; j < 9; j++) {
+          const cellElement = document.querySelector(
+            `[data-row="${i}"][data-col="${j}"]`
+          );
+
+          if (cellElement) {
+            cellElement.classList.remove("active-cell");
+          }
+        }
+      }
+    }
+  };
+
   const markInvalidCells = () => {
-    console.log("markInvalidCells");
-    console.log("invalidCells" + invalidCells);
+    // console.log("markInvalidCells");
+    // console.log("invalidCells" + invalidCells);
 
     // Apply visual updates
     for (let i = 0; i < 9; i++) {
       for (let j = 0; j < 9; j++) {
         const cellKey = `${i}-${j}`;
-        console.log("Checking cellKey:" + cellKey);
+        // console.log("Checking cellKey:" + cellKey);
 
         const cellElement = document.querySelector(
           `[data-row="${i}"][data-col="${j}"]`
@@ -51,10 +153,8 @@ export const SudokuProvider = ({ children }) => {
 
         if (cellElement) {
           if (invalidCells.has(cellKey)) {
-            console.log("found");
             cellElement.classList.add("red");
           } else {
-            console.log("not found");
             cellElement.classList.remove("red");
           }
         }
@@ -110,6 +210,9 @@ export const SudokuProvider = ({ children }) => {
         updateCell,
         currInputNumber,
         setCurrInputNumber,
+        handleCellClick,
+        handleNumberClick,
+        resetInputMode,
       }}
     >
       {children}

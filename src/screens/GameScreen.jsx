@@ -8,13 +8,11 @@ import TimerComponent from "../components/TimerComponent";
 import { useTimerContext } from "../contexts/TimerContext";
 import { useScreenContext } from "../contexts/ScreenContext";
 import { useGameDifficultyContext } from "../contexts/GameDifficultyProvider";
-import { useSudokuContext } from "../contexts/SudokuProvider";
 
 function GameScreen() {
   const { isTimerActive, toggleTimer } = useTimerContext();
   const { handleHomeClick, handleSettingsClick } = useScreenContext();
   const { gameDifficulty } = useGameDifficultyContext();
-  const { currInputNumber, setCurrInputNumber } = useSudokuContext();
 
   return (
     <div>
@@ -53,14 +51,8 @@ function GameScreen() {
           </button>
         </div>
       </div>
-      <GameGrid
-        currInputNumber={currInputNumber}
-        gameDifficulty={gameDifficulty}
-      />
-      <ButtonNumberContainer
-        currInputNumber={currInputNumber}
-        setCurrInputNumber={setCurrInputNumber}
-      />
+      <GameGrid />
+      <ButtonNumberContainer />
     </div>
   );
 }

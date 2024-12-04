@@ -1,15 +1,14 @@
 import PropTypes from "prop-types";
+import { useSudokuContext } from "../contexts/SudokuProvider";
 
-export default function InputButton({ num, setCurrInputNumber, currInput }) {
-  function onButtonClick(e) {
-    setCurrInputNumber(parseInt(e.target.value));
-  }
+export default function InputButton({ num }) {
+  const { currInputNumber, handleNumberClick } = useSudokuContext();
 
   return (
     <button
-      onClick={onButtonClick}
+      onClick={() => handleNumberClick(num)}
       value={num > 0 && num}
-      className={currInput == num ? "num-button active" : "num-button"}
+      className={currInputNumber == num ? "num-button active" : "num-button"}
     >
       {num}
     </button>
@@ -18,6 +17,4 @@ export default function InputButton({ num, setCurrInputNumber, currInput }) {
 
 InputButton.propTypes = {
   num: PropTypes.number.isRequired,
-  setCurrInputNumber: PropTypes.func.isRequired,
-  currInput: PropTypes.number.isRequired,
 };

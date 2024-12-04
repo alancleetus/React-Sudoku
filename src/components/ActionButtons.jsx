@@ -1,37 +1,32 @@
 // ActionButtons.jsx
 
-import PropTypes from "prop-types";
-
 import { AiOutlineClear } from "react-icons/ai";
-import { LiaUndoAltSolid } from "react-icons/lia";
+import { LiaRedoAltSolid, LiaUndoAltSolid } from "react-icons/lia";
 import { GoPencil } from "react-icons/go";
-import { HiMagnifyingGlass } from "react-icons/hi2";
 import "../assets/styles/ActionButtons.css";
+import { useSudokuContext } from "../contexts/SudokuProvider";
 
-function ActionButtons({ setCurrInputNumber, currInputNumber }) {
+function ActionButtons() {
+  const { currInputNumber, handleNumberClick } = useSudokuContext();
   return (
     <div className="action-buttons">
       <button
-        onClick={() => setCurrInputNumber(-1)}
-        className={`clear-button ${currInputNumber === -1 ? "active" : ""}`}
+        onClick={() => handleNumberClick(0)}
+        className={`clear-button ${currInputNumber === 0 ? "active" : ""}`}
       >
         Clear <AiOutlineClear />
       </button>
       <button className="undo-button">
         Undo <LiaUndoAltSolid />
       </button>
+      <button className="redo-button">
+        Redo <LiaRedoAltSolid />
+      </button>
       <button className="pencil-button">
         Pencil <GoPencil />
-      </button>
-      <button className="hint-button">
-        Hint <HiMagnifyingGlass />
       </button>
     </div>
   );
 }
 
-ActionButtons.propTypes = {
-  currInputNumber: PropTypes.number.isRequired,
-  setCurrInputNumber: PropTypes.func.isRequired,
-};
 export default ActionButtons;

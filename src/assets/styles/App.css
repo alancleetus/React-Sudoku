@@ -91,7 +91,10 @@ input[type="number"] {
 .sudoku-cell.bottom-margin {
   margin-bottom: 5px; /* Adjust the gap size as needed */
 }
-
+.sudoku-cell.editable-cell.active-cell {
+  background: var(--primary-color);
+  color: var(--secondary-color);
+}
 .sudoku-cell.red {
   background-color: red;
   color: white;
