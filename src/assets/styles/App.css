@@ -75,6 +75,7 @@ input[type="number"] {
   /* font-weight: bold; */
   background-color: var(--editable-cell-bg);
   color: var(--editable-cell-text-color);
+  cursor: pointer;
 }
 
 .sudoku-row {
@@ -93,17 +94,32 @@ input[type="number"] {
   background: var(--primary-color);
   color: var(--secondary-color);
 }
+
 .sudoku-cell.red {
   background-color: red;
   color: white;
+}
+
+.timer-div {
+  color: var(--secondary-color);
+  background-color: var(--primary-color);
+  min-width: 100%;
+  border-radius: 30px;
+  padding: 3px 0px;
+  display: flex;
+  justify-content: center;
+}
+.timer {
+  width: 100px;
+  opacity: 100%;
 }
 
 .play-pause-button {
   background-color: var(--primary-color); /* Adjust as per theme */
   color: white;
   border: none;
-  width: 36px; /* Typical FAB size */
-  height: 36px; /* Ensure it is a perfect circle */
+  width: 30px; /* Typical FAB size */
+  height: 30px; /* Ensure it is a perfect circle */
   display: flex;
   align-items: center;
   justify-content: center;

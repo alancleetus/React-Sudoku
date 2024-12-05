@@ -34,16 +34,27 @@ function GameScreen() {
         </button>
       </div>
 
-      <div style={{ display: "flex", alignItems: "baseline" }}>
-        <p style={{ flexGrow: "1", textAlign: "left" }}>{gameDifficulty}</p>
-        <p style={{ flexGrow: "2", textAlign: "center" }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          paddingBottom: "10px",
+          paddingTop: "3px",
+        }}
+      >
+        <p style={{ flexGrow: "1", textAlign: "left", margin: 0 }}>
+          {gameDifficulty}
+        </p>
+        <p style={{ flexGrow: "2", textAlign: "center", margin: 0 }}>
           <TimerComponent />
         </p>
         <div
           style={{
-            flexGrow: "1",
+            flexGrow: 1,
             display: "flex",
             justifyContent: "flex-end",
+            alignItems: "center", // Centers vertically
           }}
         >
           <button className="play-pause-button" onClick={toggleTimer}>

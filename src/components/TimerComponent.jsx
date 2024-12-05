@@ -4,7 +4,11 @@ import { formatTime } from "../utils/TimerUtils"; // Utility functions from a se
 const TimerComponent = () => {
   const { elapsedTime } = useTimerContext();
 
-  return <>{formatTime(elapsedTime)}</>;
+  return (
+    <div className="timer-div">
+      <div className="timer">{formatTime(elapsedTime)}</div>
+    </div>
+  );
 };
 
 export default TimerComponent;

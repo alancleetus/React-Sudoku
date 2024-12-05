@@ -2,7 +2,7 @@
 [data-theme="light"] {
   --bg-color: #fbf9f3;
   --editable-cell-bg: #ffffff;
-  --locked-cell-bg: #ffffff;
+  --locked-cell-bg: #f0f0f0;
 
   --text-color: #000000;
   --editable-cell-text-color: var(--primary-color);
@@ -18,8 +18,8 @@
 /* Dark mode theme */
 [data-theme="dark"] {
   --bg-color: #23262e;
-  --editable-cell-bg: #4b4f54;
-  --locked-cell-bg: #6a6e71;
+  --editable-cell-bg: #444444;
+  --locked-cell-bg: #6e6e6e;
 
   --text-color: #ffffff;
   --editable-cell-text-color: var(--primary-color);
