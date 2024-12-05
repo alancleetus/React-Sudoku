@@ -98,6 +98,10 @@ export const SudokuProvider = ({ children }) => {
       setCurrInputNumber(-1); // Deactivate any active number
       setInputMode("cellFirst");
     }
+
+    if (currInputNumber > 0 && getNumCount(currInputNumber) <= 0) {
+      resetInputMode();
+    }
   };
 
   const resetInputMode = () => {
@@ -206,6 +210,21 @@ export const SudokuProvider = ({ children }) => {
     }
   };
 
+  const getNumCount = (num) => {
+    let sum = 0;
+
+    // Check rows and columns
+    for (let i = 0; i < 9; i++) {
+      for (let j = 0; j < 9; j++) {
+        if (solutionGrid[i][j] == num) {
+          sum += 1;
+        }
+      }
+    }
+
+    return 9 - sum;
+  };
+
   return (
     <SudokuContext.Provider
       value={{
@@ -219,6 +238,7 @@ export const SudokuProvider = ({ children }) => {
         handleCellClick,
         handleNumberClick,
         resetInputMode,
+        getNumCount,
       }}
     >
       {children}
