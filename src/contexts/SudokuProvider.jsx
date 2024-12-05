@@ -4,28 +4,26 @@ import { validateSudokuGrid, checkSolution } from "../utils/SudokuValidator";
 import { EmptyGrid, EmptyHintGrid } from "../constants/sudokuConstants";
 import { createContext, useContext } from "react";
 import { useTimerContext } from "./TimerContext";
-import GenerateSudoku from "../utils/GenerateSudoku";
 import { useGameDifficultyContext } from "./GameDifficultyProvider";
 import { useScreenContext } from "./ScreenContext";
 import { useSettingsContext } from "./SettingsContext";
+import GenerateSudoku from "../utils/GenerateSudoku";
 
 const SudokuContext = createContext(0);
 export const SudokuProvider = ({ children }) => {
-  const { resetTimer, updateTimer, pauseTimer } = useTimerContext();
-  const { gameDifficulty, updateGameDifficulty } = useGameDifficultyContext();
   const { switchScreen } = useScreenContext();
-
+  const { gameDifficulty, updateGameDifficulty } = useGameDifficultyContext();
+  const { resetTimer, pauseTimer, updateTimer } = useTimerContext();
+  const { settings, initialSettings, setSettings, setInitialSettings } =
+    useSettingsContext();
+  const [sudokuGrid, setSudokuGrid] = useState(() => EmptyGrid());
+  const [solutionGrid, setSolutionGrid] = useState(() => EmptyGrid());
+  const [hintGrid, setHintGrid] = useState(() => EmptyHintGrid());
+  const [invalidCells, setInvalidCells] = useState(new Set()); // Track invalid cells
   const [currInputNumber, setCurrInputNumber] = useState(-1); // Active number (-1 means none)
   const [activeCell, setActiveCell] = useState(null); // Active cell (null means none)
   const [inputMode, setInputMode] = useState("noInput"); // Modes: "noInput", "numberFirst", "cellFirst"
 
-  const [sudokuGrid, setSudokuGrid] = useState(() => EmptyGrid());
-  const [solutionGrid, setSolutionGrid] = useState(() => EmptyGrid());
-  const [hintGrid, setHintGrid] = useState(() => EmptyHintGrid());
-
-  const [invalidCells, setInvalidCells] = useState(new Set()); // Track invalid cells
-
-  const { settings, initialSettings } = useSettingsContext();
   const updateCell = (row, col, value) => {
     if (row < 0 || row >= 9 || col < 0 || col >= 9) {
       console.error("Invalid row or column index");
@@ -228,16 +226,6 @@ export const SudokuProvider = ({ children }) => {
     switchScreen("game");
   };
 
-  // Resume the game if a saved state exists
-  const resumeGame = () => {
-    loadGameState();
-    switchScreen("game");
-
-    console.log(sudokuGrid);
-    console.log(solutionGrid);
-  };
-
-  // Load game state from localStorage (if any)
   const loadGameState = () => {
     const savedState = JSON.parse(localStorage.getItem("sudokuState"));
     if (savedState) {
@@ -246,7 +234,15 @@ export const SudokuProvider = ({ children }) => {
       setSudokuGrid(savedState.sudokuGrid);
       setSolutionGrid(savedState.solutionGrid);
       setHintGrid(savedState.hintGrid);
+      setSettings(savedState.settings);
+      setInitialSettings(savedState.initialSettings);
     }
+  };
+
+  // Resume the game if a saved state exists
+  const resumeGame = () => {
+    loadGameState();
+    switchScreen("game");
   };
 
   const getNumCount = (num) => {
@@ -268,7 +264,9 @@ export const SudokuProvider = ({ children }) => {
     <SudokuContext.Provider
       value={{
         sudokuGrid,
+        setSudokuGrid,
         solutionGrid,
+        setSolutionGrid,
         startNewGame,
         resumeGame,
         updateCell,

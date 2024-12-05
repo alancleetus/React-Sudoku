@@ -19,3 +19,5 @@ export const EmptyHintGrid = () =>
         9: false,
       })
     );
+
+export const DifficultySelections = { Easy: 25, Medium: 40, Hard: 60 };
