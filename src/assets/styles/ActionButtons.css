@@ -22,19 +22,3 @@
   cursor: pointer;
   border: none;
 }
-
-/* Individual button color customizations */
-.undo-button {
-  background-color: #007bff;
-  color: white;
-}
-
-.pencil-button {
-  background-color: #ffc107;
-  color: white;
-}
-
-.hint-button {
-  background-color: #28a745;
-  color: white;
-}
