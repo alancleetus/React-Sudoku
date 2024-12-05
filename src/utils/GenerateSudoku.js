@@ -1,6 +1,6 @@
 // GenerateSudoku.jsx
 
-import { EmptyGrid } from "../constants/sudokuConstants";
+import { DifficultySelections, EmptyGrid } from "../constants/sudokuConstants";
 import { validateNewCellValue } from "./SudokuValidator";
 
 // Recursively fills a Sudoku grid using a backtracking algorithm.
@@ -53,27 +53,18 @@ const generateSudokuGrid = () => {
 // Hides values in a Sudoku grid based on the specified difficulty level
 // to create the puzzle by replacing cells with 0 (empty).
 const hideValues = (SudokuGrid, difficulty) => {
-  let cellsToHide;
-  switch (difficulty) {
-    case "Easy":
-      cellsToHide = 25; // Easy: Hide 25 cells
-      break;
-    case "Medium":
-      cellsToHide = 40; // Medium: Hide 40 cells
-      break;
-    case "Hard":
-      cellsToHide = 60; // Hard: Hide 60 cells
-      break;
-    default:
-      cellsToHide = 40; // Default to medium if no valid difficulty is given
-  }
+  // Get the number of cells to hide based on difficulty
+  const cellsToHide =
+    DifficultySelections[difficulty] || DifficultySelections.Medium; // Default to Medium if invalid
 
-  while (cellsToHide > 0) {
+  let remainingCellsToHide = cellsToHide;
+
+  while (remainingCellsToHide > 0) {
     const row = Math.floor(Math.random() * 9);
     const col = Math.floor(Math.random() * 9);
     if (SudokuGrid[row][col] !== 0) {
       SudokuGrid[row][col] = 0;
-      cellsToHide--;
+      remainingCellsToHide--;
     }
   }
 

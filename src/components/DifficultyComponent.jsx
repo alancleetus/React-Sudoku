@@ -2,25 +2,24 @@ import "../assets/styles/DifficultySelector.css";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { useGameDifficultyContext } from "../contexts/GameDifficultyProvider";
+import { DifficultySelections } from "../constants/sudokuConstants";
 
 function DifficultySelector() {
   const { gameDifficulty, updateGameDifficulty } = useGameDifficultyContext();
+  // Array of difficulty levels in the desired order
+  const difficultyLevels = Object.keys(DifficultySelections);
 
   const incrementDifficulty = () => {
-    let newDifficulty = "Medium";
-    if (gameDifficulty === "Hard") newDifficulty = "Easy";
-    else if (gameDifficulty === "Easy") newDifficulty = "Medium";
-    else if (gameDifficulty === "Medium") newDifficulty = "Hard";
-    updateGameDifficulty(newDifficulty);
+    const currentIndex = difficultyLevels.indexOf(gameDifficulty);
+    const nextIndex = (currentIndex + 1) % difficultyLevels.length; // Cycle back to the start if at the end
+    updateGameDifficulty(difficultyLevels[nextIndex]);
   };
 
   const decrementDifficulty = () => {
-    let newDifficulty = "Medium";
-    if (gameDifficulty === "Medium") newDifficulty = "Easy";
-    else if (gameDifficulty === "Hard") newDifficulty = "Medium";
-    else if (gameDifficulty === "Easy") newDifficulty = "Hard";
-    else newDifficulty = "Medium";
-    updateGameDifficulty(newDifficulty);
+    const currentIndex = difficultyLevels.indexOf(gameDifficulty);
+    const prevIndex =
+      (currentIndex - 1 + difficultyLevels.length) % difficultyLevels.length; // Cycle to the end if at the start
+    updateGameDifficulty(difficultyLevels[prevIndex]);
   };
 
   return (

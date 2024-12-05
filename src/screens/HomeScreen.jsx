@@ -34,7 +34,7 @@ function HomeScreen() {
           <span>
             {resumeDiff !== ""
               ? `${resumeDiff} - ${formatTime(resumeTime)}`
-              : ""}{" "}
+              : ""}
           </span>
         </button>
       </div>
