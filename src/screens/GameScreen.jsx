@@ -8,12 +8,14 @@ import TimerComponent from "../components/TimerComponent";
 import { useTimerContext } from "../contexts/TimerContext";
 import { useScreenContext } from "../contexts/ScreenContext";
 import { useGameDifficultyContext } from "../contexts/GameDifficultyProvider";
+import { useSettingsContext } from "../contexts/SettingsContext";
 
 function GameScreen() {
   const { isTimerActive, toggleTimer } = useTimerContext();
   const { handleHomeClick, handleSettingsClick } = useScreenContext();
   const { gameDifficulty } = useGameDifficultyContext();
 
+  const { settings } = useSettingsContext();
   return (
     <div>
       <div style={{ display: "flex" }}>
@@ -47,7 +49,7 @@ function GameScreen() {
           {gameDifficulty}
         </p>
         <div style={{ flexGrow: "2", textAlign: "center", margin: 0 }}>
-          <TimerComponent />
+          {settings.showTimer ? <TimerComponent /> : <></>}
         </div>
         <div
           style={{
