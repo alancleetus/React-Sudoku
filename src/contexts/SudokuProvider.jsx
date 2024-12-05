@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { validateSudokuGrid } from "../utils/SudokuValidator";
+import { validateSudokuGrid, checkSolution } from "../utils/SudokuValidator";
 import { EmptyGrid } from "../constants/sudokuConstants";
 import { createContext, useContext } from "react";
 import { useTimerContext } from "./TimerContext";
@@ -10,7 +10,7 @@ import { useScreenContext } from "./ScreenContext";
 
 const SudokuContext = createContext(0);
 export const SudokuProvider = ({ children }) => {
-  const { resetTimer, updateTimer } = useTimerContext();
+  const { resetTimer, updateTimer, pauseTimer } = useTimerContext();
   const { gameDifficulty, updateGameDifficulty } = useGameDifficultyContext();
   const { switchScreen } = useScreenContext();
 
@@ -33,6 +33,12 @@ export const SudokuProvider = ({ children }) => {
     setSolutionGrid(newGrid);
 
     validateSudokuGrid(solutionGrid, row, col, value);
+
+    if (checkSolution(solutionGrid)) {
+      alert("Completed!");
+      pauseTimer();
+    }
+
     setInvalidCells(validateSudokuGrid(newGrid)); // Revalidate after update
   };
 

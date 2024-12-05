@@ -20,6 +20,18 @@ export const validateNewCellValue = (SudokuGrid, row, col, newValue) => {
   return true;
 };
 
+export const checkSolution = (SudokuGrid) => {
+  // Check rows and columns
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      if (SudokuGrid[i][j] <= 0) {
+        return false; //grid incomplete
+      }
+    }
+  }
+  return validateSudokuGrid(SudokuGrid);
+};
+
 export const validateSudokuGrid = (SudokuGrid) => {
   const newInvalidCellsSet = new Set();
 
