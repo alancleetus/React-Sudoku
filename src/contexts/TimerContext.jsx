@@ -23,7 +23,7 @@ export const TimerProvider = ({ children }) => {
   const resetTimer = () => setElapsedTime(0);
   const pauseTimer = () => setTimerActive(false);
   const resumeTimer = () => setTimerActive(true);
-  const toggleTimer = () => setTimerActive(!isTimerActive);
+  const toggleTimer = () => setTimerActive((prev) => !prev);
   const getIsTimerActive = () => isTimerActive;
   const updateTimer = (time) => setElapsedTime(time);
 
