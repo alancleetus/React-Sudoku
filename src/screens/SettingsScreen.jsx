@@ -1,6 +1,7 @@
 import { BsArrowLeftShort } from "react-icons/bs";
 import ThemeSelector from "../components/ThemeSelector";
 import { useScreenContext } from "../contexts/ScreenContext";
+import SettingsPage from "./SettingsPage";
 function SettingsScreen() {
   const { handleBackButton } = useScreenContext();
   return (
@@ -18,6 +19,7 @@ function SettingsScreen() {
         <div style={{ flexGrow: "1" }}></div>
       </div>
       <ThemeSelector />
+      <SettingsPage />
     </>
   );
 }

@@ -46,9 +46,9 @@ function GameScreen() {
         <p style={{ flexGrow: "1", textAlign: "left", margin: 0 }}>
           {gameDifficulty}
         </p>
-        <p style={{ flexGrow: "2", textAlign: "center", margin: 0 }}>
+        <div style={{ flexGrow: "2", textAlign: "center", margin: 0 }}>
           <TimerComponent />
-        </p>
+        </div>
         <div
           style={{
             flexGrow: 1,

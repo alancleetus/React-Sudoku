@@ -7,6 +7,7 @@ import { useTimerContext } from "./TimerContext";
 import GenerateSudoku from "../utils/GenerateSudoku";
 import { useGameDifficultyContext } from "./GameDifficultyProvider";
 import { useScreenContext } from "./ScreenContext";
+import { useSettingsContext } from "./SettingsContext";
 
 const SudokuContext = createContext(0);
 export const SudokuProvider = ({ children }) => {
@@ -23,6 +24,7 @@ export const SudokuProvider = ({ children }) => {
 
   const [invalidCells, setInvalidCells] = useState(new Set()); // Track invalid cells
 
+  const { settings } = useSettingsContext();
   const updateCell = (row, col, value) => {
     console.log("updating solution");
     console.log("row:" + row + ", col:" + col + ", val:" + value);
@@ -148,24 +150,26 @@ export const SudokuProvider = ({ children }) => {
   };
 
   const markInvalidCells = () => {
-    // console.log("markInvalidCells");
-    // console.log("invalidCells" + invalidCells);
+    if (settings.highlightErrors) {
+      // console.log("markInvalidCells");
+      // console.log("invalidCells" + invalidCells);
 
-    // Apply visual updates
-    for (let i = 0; i < 9; i++) {
-      for (let j = 0; j < 9; j++) {
-        const cellKey = `${i}-${j}`;
-        // console.log("Checking cellKey:" + cellKey);
+      // Apply visual updates
+      for (let i = 0; i < 9; i++) {
+        for (let j = 0; j < 9; j++) {
+          const cellKey = `${i}-${j}`;
+          // console.log("Checking cellKey:" + cellKey);
 
-        const cellElement = document.querySelector(
-          `[data-row="${i}"][data-col="${j}"]`
-        );
+          const cellElement = document.querySelector(
+            `[data-row="${i}"][data-col="${j}"]`
+          );
 
-        if (cellElement) {
-          if (invalidCells.has(cellKey)) {
-            cellElement.classList.add("red");
-          } else {
-            cellElement.classList.remove("red");
+          if (cellElement) {
+            if (invalidCells.has(cellKey)) {
+              cellElement.classList.add("red");
+            } else {
+              cellElement.classList.remove("red");
+            }
           }
         }
       }

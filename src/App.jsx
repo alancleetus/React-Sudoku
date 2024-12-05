@@ -6,18 +6,21 @@ import { GameDifficultyProvider } from "./contexts/GameDifficultyProvider";
 import { SudokuProvider } from "./contexts/SudokuProvider";
 import { ScreenProvider } from "./contexts/ScreenContext";
 import AppContent from "./AppContent";
+import { SettingsProvider } from "./contexts/SettingsContext";
 
 function App() {
   return (
-    <TimerProvider>
-      <ScreenProvider>
-        <GameDifficultyProvider>
-          <SudokuProvider>
-            <AppContent />
-          </SudokuProvider>
-        </GameDifficultyProvider>
-      </ScreenProvider>
-    </TimerProvider>
+    <SettingsProvider>
+      <TimerProvider>
+        <ScreenProvider>
+          <GameDifficultyProvider>
+            <SudokuProvider>
+              <AppContent />
+            </SudokuProvider>
+          </GameDifficultyProvider>
+        </ScreenProvider>
+      </TimerProvider>
+    </SettingsProvider>
   );
 }
 
