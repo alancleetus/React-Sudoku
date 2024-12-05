@@ -46,7 +46,7 @@ function GameScreen() {
             justifyContent: "flex-end",
           }}
         >
-          <button className="play-pause-button" onClick={() => toggleTimer}>
+          <button className="play-pause-button" onClick={toggleTimer}>
             {isTimerActive ? <IoIosPause /> : <IoIosPlay />}
           </button>
         </div>
