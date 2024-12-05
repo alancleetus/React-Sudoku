@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { useSudokuContext } from "../contexts/SudokuProvider";
 
 export default function InputCell({ row, col }) {
-  const { sudokuGrid, solutionGrid, handleCellClick } = useSudokuContext();
+  const { sudokuGrid, solutionGrid, handleCellClick, hintGrid } =
+    useSudokuContext();
 
   const initialValue = sudokuGrid[row][col]
     ? sudokuGrid[row][col]
@@ -12,6 +13,7 @@ export default function InputCell({ row, col }) {
     ? solutionGrid[row][col]
     : null;
   const [cellValue, setCellValue] = useState(initialValue);
+  const notes = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
   useEffect(() => {
     setCellValue(initialValue > 0 ? initialValue : null);
@@ -37,6 +39,20 @@ export default function InputCell({ row, col }) {
       data-col={col}
     >
       <div>{cellValue}</div>
+      {!cellValue && notes.length > 0 && (
+        <div className="cell-notes">
+          {notes.sort().map((note) => (
+            <span
+              key={note}
+              className={
+                hintGrid[row][col][note] === true ? "note shown" : "note"
+              }
+            >
+              {note}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

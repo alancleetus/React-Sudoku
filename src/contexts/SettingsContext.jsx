@@ -15,7 +15,9 @@ export const SettingsProvider = ({ children }) => {
     // disablePencil: false, // Disable pencil mode
     disableDigitWhenNine: true, // Disable a digit when its count reaches 9
   });
-
+  const [initialSettings, setInitialSettings] = useState({
+    pencilMode: true, // Enable or disable pencil mode
+  });
   const toggleSetting = (key) => {
     setSettings((prev) => ({
       ...prev,
@@ -23,8 +25,23 @@ export const SettingsProvider = ({ children }) => {
     }));
   };
 
+  const toggleInitialSetting = (key) => {
+    setInitialSettings((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
+
   return (
-    <SettingsContext.Provider value={{ settings, toggleSetting }}>
+    <SettingsContext.Provider
+      value={{
+        settings,
+        toggleSetting,
+        initialSettings,
+        setInitialSettings,
+        toggleInitialSetting,
+      }}
+    >
       {children}
     </SettingsContext.Provider>
   );

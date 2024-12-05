@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { validateSudokuGrid, checkSolution } from "../utils/SudokuValidator";
-import { EmptyGrid } from "../constants/sudokuConstants";
+import { EmptyGrid, EmptyHintGrid } from "../constants/sudokuConstants";
 import { createContext, useContext } from "react";
 import { useTimerContext } from "./TimerContext";
 import GenerateSudoku from "../utils/GenerateSudoku";
@@ -21,27 +21,61 @@ export const SudokuProvider = ({ children }) => {
 
   const [sudokuGrid, setSudokuGrid] = useState(() => EmptyGrid());
   const [solutionGrid, setSolutionGrid] = useState(() => EmptyGrid());
+  const [hintGrid, setHintGrid] = useState(() => EmptyHintGrid());
 
   const [invalidCells, setInvalidCells] = useState(new Set()); // Track invalid cells
 
-  const { settings } = useSettingsContext();
+  const { settings, initialSettings } = useSettingsContext();
   const updateCell = (row, col, value) => {
+    if (row < 0 || row >= 9 || col < 0 || col >= 9) {
+      console.error("Invalid row or column index");
+      return;
+    }
+
     console.log("updating solution");
     console.log("row:" + row + ", col:" + col + ", val:" + value);
 
-    const newGrid = [...solutionGrid];
-    newGrid[row][col] = value;
+    if (initialSettings.pencilMode) {
+      console.log("updating hints");
+      // Deep copy the hint grid
+      const newHintGrid = hintGrid.map(
+        (row) => row.map((cell) => ({ ...cell })) // Clone each cell object
+      );
 
-    setSolutionGrid(newGrid);
+      if (value === 0) {
+        // clear all hints
+        newHintGrid[row][col] = {
+          1: false,
+          2: false,
+          3: false,
+          4: false,
+          5: false,
+          6: false,
+          7: false,
+          8: false,
+          9: false,
+        };
+      } else {
+        newHintGrid[row][col][value] === true
+          ? (newHintGrid[row][col][value] = false)
+          : (newHintGrid[row][col][value] = true);
+      }
+      setHintGrid(newHintGrid);
+    } else {
+      const newGrid = [...solutionGrid];
+      newGrid[row][col] = value;
 
-    validateSudokuGrid(solutionGrid, row, col, value);
+      setSolutionGrid(newGrid);
 
-    if (checkSolution(solutionGrid)) {
-      alert("Completed!");
-      pauseTimer();
+      validateSudokuGrid(solutionGrid, row, col, value);
+
+      if (checkSolution(solutionGrid)) {
+        alert("Completed!");
+        pauseTimer();
+      }
+
+      setInvalidCells(validateSudokuGrid(newGrid)); // Revalidate after update
     }
-
-    setInvalidCells(validateSudokuGrid(newGrid)); // Revalidate after update
   };
 
   const handleNumberClick = (num) => {
@@ -209,8 +243,9 @@ export const SudokuProvider = ({ children }) => {
     if (savedState) {
       updateGameDifficulty(savedState.gameDifficulty);
       updateTimer(savedState.elapsedTime);
-      setSudokuGrid(savedState.SudokuGrid);
-      setSolutionGrid(savedState.SolutionGrid);
+      setSudokuGrid(savedState.sudokuGrid);
+      setSolutionGrid(savedState.solutionGrid);
+      setHintGrid(savedState.hintGrid);
     }
   };
 
@@ -243,6 +278,8 @@ export const SudokuProvider = ({ children }) => {
         handleNumberClick,
         resetInputMode,
         getNumCount,
+        hintGrid,
+        setHintGrid,
       }}
     >
       {children}
