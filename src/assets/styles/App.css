@@ -55,14 +55,19 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
-
+#sudoku-game-grid {
+  background-color: #ccd3dc;
+  padding: 1px;
+  border-radius: 2px;
+}
 .sudoku-cell {
   width: 2em;
   height: 2em;
-  border: 1px solid #eee;
+  border: 1px solid #ccd3dc;
   padding: 3px;
   text-align: center;
   line-height: 2em;
+  transition: all 0.2s ease;
 }
 
 .sudoku-cell.locked-cell {
@@ -106,15 +111,24 @@ input[type="number"] {
 }
 
 .sudoku-cell.right-margin {
-  margin-right: 2px; /* Adjust the gap size as needed */
+  margin-right: 1px; /* Adjust the gap size as needed */
 }
 
 .sudoku-cell.bottom-margin {
-  margin-bottom: 2px; /* Adjust the gap size as needed */
+  margin-bottom: 1px; /* Adjust the gap size as needed */
 }
+
 .sudoku-cell.editable-cell.active-cell {
   background: var(--primary-color);
   color: var(--secondary-color);
+}
+
+.sudoku-cell.neighbor-cell {
+  /* background: var(--primary-color);
+  background-color: var(--secondary-color);
+   */
+  background-color: var(--secondary-color);
+  color: black;
 }
 
 .sudoku-cell.red {

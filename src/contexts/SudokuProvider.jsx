@@ -36,7 +36,7 @@ export const SudokuProvider = ({ children }) => {
       initialSettings: initialSettings,
     };
 
-    console.log("Saving game state to localStorage:", gameState); // Debug log
+    // console.log("Saving game state to localStorage:", gameState); // Debug log
     localStorage.setItem("sudokuState", JSON.stringify(gameState));
   }, [
     sudokuGrid,
@@ -180,24 +180,49 @@ export const SudokuProvider = ({ children }) => {
   }, [inputMode]);
 
   const markActiveCell = () => {
-    if (activeCell) {
-      const cellElement = document.querySelector(
-        `[data-row="${activeCell.row}"][data-col="${activeCell.col}"]`
-      );
-
-      if (cellElement) {
-        cellElement.classList.add("active-cell");
+    // Clear previous highlights
+    for (let i = 0; i < 9; i++) {
+      for (let j = 0; j < 9; j++) {
+        const cellElement = document.querySelector(
+          `[data-row="${i}"][data-col="${j}"]`
+        );
+        if (cellElement) {
+          cellElement.classList.remove("active-cell", "neighbor-cell");
+        }
       }
-    } else {
-      // Apply visual updates
-      for (let i = 0; i < 9; i++) {
-        for (let j = 0; j < 9; j++) {
-          const cellElement = document.querySelector(
-            `[data-row="${i}"][data-col="${j}"]`
-          );
+    }
 
-          if (cellElement) {
-            cellElement.classList.remove("active-cell");
+    // Highlight the active cell and its neighbors
+    if (activeCell) {
+      const { row, col } = activeCell;
+
+      // Highlight the active cell
+      const activeCellElement = document.querySelector(
+        `[data-row="${row}"][data-col="${col}"]`
+      );
+      if (activeCellElement) {
+        activeCellElement.classList.add("active-cell");
+      }
+
+      // Highlight neighboring cells in the same row and column
+      for (let i = 0; i < 9; i++) {
+        // Row neighbors
+        if (i !== col) {
+          const rowNeighbor = document.querySelector(
+            `[data-row="${row}"][data-col="${i}"]`
+          );
+          if (rowNeighbor) {
+            rowNeighbor.classList.add("neighbor-cell");
+          }
+        }
+
+        // Column neighbors
+        if (i !== row) {
+          const colNeighbor = document.querySelector(
+            `[data-row="${i}"][data-col="${col}"]`
+          );
+          if (colNeighbor) {
+            colNeighbor.classList.add("neighbor-cell");
           }
         }
       }

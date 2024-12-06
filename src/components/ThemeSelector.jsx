@@ -4,7 +4,7 @@ import { themes } from "../constants/themesConstants";
 export default function ThemeSelector() {
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const [colorScheme, setColorScheme] = useState(
-    localStorage.getItem("colorScheme") || "blue"
+    localStorage.getItem("colorScheme") || "pink"
   );
 
   // Update theme or color scheme

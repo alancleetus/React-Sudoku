@@ -12,7 +12,6 @@ export const SettingsProvider = ({ children }) => {
     // autoNoteRemoval: true, // Automatically remove conflicting notes
     showTimer: true, // Show the timer
     // holdToErase: true, // Allow holding cells to erase them
-    // disablePencil: false, // Disable pencil mode
     disableDigitWhenNine: true, // Disable a digit when its count reaches 9
   });
   const [initialSettings, setInitialSettings] = useState({
@@ -25,12 +24,8 @@ export const SettingsProvider = ({ children }) => {
     }));
   };
   useEffect(() => {
-    console.log("saving timer...");
     const savedState = JSON.parse(localStorage.getItem("sudokuState"));
-
     const gameState = { ...savedState, settings, initialSettings };
-
-    console.log("Saving settings to localStorage:", gameState); // Debug log
     localStorage.setItem("sudokuState", JSON.stringify(gameState));
   }, [settings, initialSettings]); // This will trigger on any of these state changes
 

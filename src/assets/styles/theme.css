@@ -1,221 +1,221 @@
-/* Light mode theme*/
+/* Light mode theme */
 [data-theme="light"] {
-  --bg-color: #fbf9f3;
-  --editable-cell-bg: #ffffff;
-  --locked-cell-bg: #f0f0f0;
+  --bg-color: hsl(39, 70%, 95%);
+  --editable-cell-bg: hsl(0, 0%, 100%);
+  --locked-cell-bg: hsl(0, 0%, 100%);
 
-  --text-color: #000000;
+  --text-color: hsl(0, 0%, 0%);
   --editable-cell-text-color: var(--primary-color);
   --locked-cell-text-color: var(--text-color);
-  --gray-color: #e4ebf3;
+  --gray-color: hsl(216, 20%, 90%);
 
-  --highlight-cell: #d4d7dc;
-  --highlight-row: #798090;
-  --primary-color: #12076d; /* Default primary color for light mode */
-  --secondary-color: #e8e6f1; /* Default secondary color for light mode */
+  --highlight-cell: hsl(216, 10%, 85%);
+  --highlight-row: hsl(222, 15%, 50%);
+  --primary-color: hsl(
+    342,
+    75%,
+    54%
+  ); /* Default primary color for light mode */
+  --secondary-color: hsl(
+    342,
+    80%,
+    96%
+  ); /* Default secondary color for light mode */
 }
 
 /* Dark mode theme */
 [data-theme="dark"] {
-  --bg-color: #23262e;
-  --editable-cell-bg: #444444;
-  --locked-cell-bg: #6e6e6e;
+  --bg-color: hsl(220, 15%, 14%);
+  --editable-cell-bg: hsl(0, 0%, 27%);
+  --locked-cell-bg: hsl(0, 0%, 27%);
 
-  --text-color: #ffffff;
-  --editable-cell-text-color: var(--primary-color);
-  --locked-cell-text-color: var(--text-color);
-  --gray-color: #2d3b56;
+  --text-color: hsl(0, 0%, 100%);
+  --editable-cell-text-color: hsl(0, 0%, 100%);
+  --locked-cell-text-color: hsl(0, 0%, 100%);
+  --gray-color: hsl(218, 30%, 35%);
 
-  --highlight-cell: #d4d7dc;
-  --highlight-row: #798090;
-  --primary-color: #12076d; /* Default primary color for dark mode */
-  --secondary-color: #e8e6f1; /* Default secondary color for dark mode */
+  --highlight-cell: hsl(216, 10%, 85%);
+  --highlight-row: hsl(222, 15%, 50%);
+  --primary-color: hsl(
+    342,
+    75%,
+    54%
+  ); /* Default primary color for light mode */
+  --secondary-color: hsl(
+    342,
+    80%,
+    96%
+  ); /* Default secondary color for light mode */
 }
 
 /* Custom color palettes */
 [data-color-scheme="green"] {
-  --primary-color: #01bb32;
-  --secondary-color: #e6f8ec;
+  --primary-color: hsl(135, 100%, 37%);
+  --secondary-color: hsl(135, 70%, 92%);
 }
 
 [data-color-scheme="blue"] {
-  --primary-color: #0074ff;
-  --secondary-color: #e5f1ff;
+  --primary-color: hsl(210, 100%, 50%);
+  --secondary-color: hsl(210, 90%, 94%);
 }
 
-[data-color-scheme="indigo"] {
-  --primary-color: #12076d;
-  --secondary-color: #e8e6f1;
+[data-color-scheme="navy"] {
+  --primary-color: hsl(247, 90%, 22%);
+  --secondary-color: hsl(247, 20%, 93%);
 }
 
 [data-color-scheme="pink"] {
-  --primary-color: #e33c74;
-  --secondary-color: #ffebf0;
+  --primary-color: hsl(342, 75%, 54%);
+  --secondary-color: hsl(342, 80%, 96%);
 }
 
 [data-color-scheme="teal"] {
-  --primary-color: #6dcfb8;
-  --secondary-color: #caefde;
+  --primary-color: hsl(165, 50%, 60%);
+  --secondary-color: hsl(165, 60%, 88%);
+}
+
+[data-color-scheme="purple"] {
+  --primary-color: hsl(270, 45%, 60%);
+  --secondary-color: hsl(270, 40%, 90%);
 }
 
 [data-color-scheme="violet"] {
-  --primary-color: #a06cd0;
-  --secondary-color: #d7cbf1;
-}
-
-[data-color-scheme="lilac"] {
-  --primary-color: #e2a7da;
-  --secondary-color: #f2dff4;
+  --primary-color: hsl(300, 40%, 75%);
+  --secondary-color: hsl(300, 60%, 94%);
 }
 
 [data-color-scheme="olive"] {
-  --primary-color: #808000;
-  --secondary-color: #f6eee1;
+  --primary-color: hsl(60, 25%, 50%);
+  --secondary-color: hsl(42, 50%, 94%);
 }
 
-[data-color-scheme="scarlet"] {
-  --primary-color: #cf6b66;
-  --secondary-color: #f6e0e3;
+[data-color-scheme="terracotta"] {
+  --primary-color: hsl(4, 50%, 61%);
+  --secondary-color: hsl(340, 50%, 95%);
 }
 
-[data-color-scheme="gray"] {
-  --primary-color: #5e6c7a;
-  --secondary-color: #eaebec;
+[data-color-scheme="metallic"] {
+  --primary-color: hsl(210, 15%, 40%);
+  --secondary-color: hsl(0, 5%, 92%);
 }
 
 [data-color-scheme="aquamarine"] {
-  --primary-color: #2cc3b0;
-  --secondary-color: #d0f4ed;
+  --primary-color: hsl(175, 60%, 50%);
+  --secondary-color: hsl(175, 60%, 88%);
 }
 
-/* When color scheme is green and the theme is dark */
+/* Color scheme overrides for dark theme */
 [data-color-scheme="green"][data-theme="dark"] {
-  --bg-color: #1c2a25; /* Dark background with a hint of green */
-  --text-color: #e6f8ec; /* Light text for dark mode */
+  --bg-color: hsl(135, 20%, 15%);
+  --text-color: hsl(135, 70%, 92%);
 }
 
-/* When color scheme is blue and the theme is dark */
 [data-color-scheme="blue"][data-theme="dark"] {
-  --bg-color: #1c2732; /* Dark background with a hint of blue */
-  --text-color: #e5f1ff; /* Light text for dark mode */
+  --bg-color: hsl(210, 20%, 18%);
+  --text-color: hsl(210, 90%, 94%);
 }
 
-/* When color scheme is indigo and the theme is dark */
-[data-color-scheme="indigo"][data-theme="dark"] {
-  --bg-color: #1d1a30; /* Dark background with a hint of indigo */
-  --text-color: #e8e6f1; /* Light text for dark mode */
+[data-color-scheme="navy"][data-theme="dark"] {
+  --bg-color: hsl(247, 20%, 16%);
+  --text-color: hsl(247, 20%, 93%);
 }
 
-/* When color scheme is pink and the theme is dark */
 [data-color-scheme="pink"][data-theme="dark"] {
-  --bg-color: #2a1e26; /* Dark background with a hint of pink */
-  --text-color: #ffebf0; /* Light text for dark mode */
+  --bg-color: hsl(342, 25%, 16%);
+  --text-color: hsl(342, 80%, 96%);
 }
 
-/* When color scheme is teal and the theme is dark */
 [data-color-scheme="teal"][data-theme="dark"] {
-  --bg-color: #1c2c2a; /* Dark background with a hint of teal */
-  --text-color: #caefde; /* Light text for dark mode */
+  --bg-color: hsl(165, 20%, 16%);
+  --text-color: hsl(165, 60%, 88%);
 }
 
-/* When color scheme is violet and the theme is dark */
+[data-color-scheme="purple"][data-theme="dark"] {
+  --bg-color: hsl(270, 20%, 16%);
+  --text-color: hsl(270, 40%, 90%);
+}
+
 [data-color-scheme="violet"][data-theme="dark"] {
-  --bg-color: #261d2c; /* Dark background with a hint of violet */
-  --text-color: #d7cbf1; /* Light text for dark mode */
+  --bg-color: hsl(300, 20%, 18%);
+  --text-color: hsl(300, 60%, 94%);
 }
 
-/* When color scheme is lilac and the theme is dark */
-[data-color-scheme="lilac"][data-theme="dark"] {
-  --bg-color: #2a232a; /* Dark background with a hint of lilac */
-  --text-color: #f2dff4; /* Light text for dark mode */
-}
-
-/* When color scheme is olive and the theme is dark */
 [data-color-scheme="olive"][data-theme="dark"] {
-  --bg-color: #2b2a23; /* Dark background with a hint of olive */
-  --text-color: #f6eee1; /* Light text for dark mode */
+  --bg-color: hsl(60, 20%, 15%);
+  --text-color: hsl(42, 50%, 94%);
 }
 
-/* When color scheme is scarlet and the theme is dark */
-[data-color-scheme="scarlet"][data-theme="dark"] {
-  --bg-color: #2a2323; /* Dark background with a hint of scarlet */
-  --text-color: #f6e0e3; /* Light text for dark mode */
+[data-color-scheme="terracotta"][data-theme="dark"] {
+  --bg-color: hsl(4, 20%, 15%);
+  --text-color: hsl(340, 50%, 95%);
 }
 
-/* When color scheme is gray and the theme is dark */
-[data-color-scheme="gray"][data-theme="dark"] {
-  --bg-color: #25282b; /* Dark background with a hint of gray */
-  --text-color: #eaebec; /* Light text for dark mode */
+[data-color-scheme="metallic"][data-theme="dark"] {
+  --bg-color: hsl(210, 15%, 15%);
+  --text-color: hsl(0, 5%, 92%);
 }
 
-/* When color scheme is aquamarine and the theme is dark */
 [data-color-scheme="aquamarine"][data-theme="dark"] {
-  --bg-color: #1c2927; /* Dark background with a hint of aquamarine */
-  --text-color: #d0f4ed; /* Light text for dark mode */
+  --bg-color: hsl(175, 20%, 15%);
+  --text-color: hsl(175, 60%, 88%);
 }
 
 /* When color scheme is green and the theme is light */
 [data-color-scheme="green"][data-theme="light"] {
-  --bg-color: #e4f6e2; /* Light background with a hint of green */
-  --text-color: #23262e; /* Almost black text for contrast */
+  --bg-color: hsl(135, 70%, 92%);
+  --text-color: hsl(220, 10%, 14%); /* Almost black text for contrast */
 }
 
 /* When color scheme is blue and the theme is light */
 [data-color-scheme="blue"][data-theme="light"] {
-  --bg-color: #e5f1ff; /* Light background with a hint of blue */
-  --text-color: #23262e; /* Almost black text for contrast */
+  --bg-color: hsl(210, 90%, 94%);
+  --text-color: hsl(220, 10%, 14%); /* Almost black text for contrast */
 }
 
-/* When color scheme is indigo and the theme is light */
-[data-color-scheme="indigo"][data-theme="light"] {
-  --bg-color: #e8e6f1; /* Light background with a hint of indigo */
-  --text-color: #23262e; /* Almost black text for contrast */
+[data-color-scheme="navy"][data-theme="light"] {
+  --bg-color: hsl(247, 20%, 93%);
+  --text-color: hsl(220, 10%, 14%); /* Almost black text for contrast */
 }
 
 /* When color scheme is pink and the theme is light */
 [data-color-scheme="pink"][data-theme="light"] {
-  --bg-color: #ffebf0; /* Light background with a hint of pink */
-  --text-color: #23262e; /* Almost black text for contrast */
+  --bg-color: hsl(342, 80%, 96%);
+  --text-color: hsl(220, 10%, 14%); /* Almost black text for contrast */
 }
 
 /* When color scheme is teal and the theme is light */
 [data-color-scheme="teal"][data-theme="light"] {
-  --bg-color: #caefde; /* Light background with a hint of teal */
-  --text-color: #23262e; /* Almost black text for contrast */
+  --bg-color: hsl(165, 60%, 88%);
+  --text-color: hsl(220, 10%, 14%); /* Almost black text for contrast */
 }
 
-/* When color scheme is violet and the theme is light */
+[data-color-scheme="purple"][data-theme="light"] {
+  --bg-color: hsl(270, 40%, 90%);
+  --text-color: hsl(220, 10%, 14%); /* Almost black text for contrast */
+}
+
 [data-color-scheme="violet"][data-theme="light"] {
-  --bg-color: #d7cbf1; /* Light background with a hint of violet */
-  --text-color: #23262e; /* Almost black text for contrast */
+  --bg-color: hsl(300, 60%, 94%);
+  --text-color: hsl(220, 10%, 14%); /* Almost black text for contrast */
 }
 
-/* When color scheme is lilac and the theme is light */
-[data-color-scheme="lilac"][data-theme="light"] {
-  --bg-color: #f2dff4; /* Light background with a hint of lilac */
-  --text-color: #23262e; /* Almost black text for contrast */
-}
-
-/* When color scheme is olive and the theme is light */
 [data-color-scheme="olive"][data-theme="light"] {
-  --bg-color: #f6eee1; /* Light background with a hint of olive */
-  --text-color: #23262e; /* Almost black text for contrast */
+  --bg-color: hsl(42, 50%, 94%);
+  --text-color: hsl(220, 10%, 14%); /* Almost black text for contrast */
 }
 
-/* When color scheme is scarlet and the theme is light */
-[data-color-scheme="scarlet"][data-theme="light"] {
-  --bg-color: #f6e0e3; /* Light background with a hint of scarlet */
-  --text-color: #23262e; /* Almost black text for contrast */
+[data-color-scheme="terracotta"][data-theme="light"] {
+  --bg-color: hsl(340, 50%, 95%);
+  --text-color: hsl(220, 10%, 14%); /* Almost black text for contrast */
 }
 
-/* When color scheme is gray and the theme is light */
-[data-color-scheme="gray"][data-theme="light"] {
-  --bg-color: #eaebec; /* Light background with a hint of gray */
-  --text-color: #23262e; /* Almost black text for contrast */
+[data-color-scheme="metallic"][data-theme="light"] {
+  --bg-color: hsl(220, 5%, 92%);
+  --text-color: hsl(220, 10%, 14%); /* Almost black text for contrast */
 }
 
 /* When color scheme is aquamarine and the theme is light */
 [data-color-scheme="aquamarine"][data-theme="light"] {
-  --bg-color: #d0f4ed; /* Light background with a hint of aquamarine */
-  --text-color: #23262e; /* Almost black text for contrast */
+  --bg-color: hsl(175, 60%, 88%);
+  --text-color: hsl(220, 10%, 14%); /* Almost black text for contrast */
 }

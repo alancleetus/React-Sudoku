@@ -38,7 +38,7 @@ button.theme-btn.selected .checkmark {
   opacity: 1; /* Show checkmark when selected */
 }
 /* Define colors for each theme */
-.theme-btn.scarlet {
+.theme-btn.terracotta {
   background-color: #e2aba8;
 }
 
@@ -58,11 +58,11 @@ button.theme-btn.selected .checkmark {
   background-color: #0074ff;
 }
 
-.theme-btn.indigo {
+.theme-btn.navy {
   background-color: #12076d;
 }
 
-.theme-btn.violet {
+.theme-btn.purple {
   background-color: #a06cd0;
 }
 
@@ -74,10 +74,10 @@ button.theme-btn.selected .checkmark {
   background-color: #6dcfb8;
 }
 
-.theme-btn.lilac {
-  background-color: #e2a7da;
+.theme-btn.violet {
+  background-color: rgb(226, 167, 218);
 }
 
-.theme-btn.gray {
+.theme-btn.metallic {
   background-color: #5e6c7a;
 }
