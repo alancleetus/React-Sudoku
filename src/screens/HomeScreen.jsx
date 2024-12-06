@@ -30,19 +30,24 @@ function HomeScreen() {
           New Game
         </button>
       </div>
-      <div>
-        {!isEqual(prevState.sudokuGrid, EmptyGrid()) && (
-          <button className="home-screen-buttons" onClick={() => resumeGame()}>
-            <span>Resume Game</span>
-            <br />
-            <span>
-              {resumeDiff !== ""
-                ? `${resumeDiff} - ${formatTime(resumeTime)}`
-                : ""}
-            </span>
-          </button>
-        )}
-      </div>
+      {prevState && (
+        <div>
+          {!isEqual(prevState.sudokuGrid, EmptyGrid()) && (
+            <button
+              className="home-screen-buttons"
+              onClick={() => resumeGame()}
+            >
+              <span>Resume Game</span>
+              <br />
+              <span>
+                {resumeDiff !== ""
+                  ? `${resumeDiff} - ${formatTime(resumeTime)}`
+                  : ""}
+              </span>
+            </button>
+          )}
+        </div>
+      )}
       <button className="home-screen-buttons" onClick={handleSettingsClick}>
         Settings
       </button>
