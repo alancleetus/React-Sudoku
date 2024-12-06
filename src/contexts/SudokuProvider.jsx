@@ -23,6 +23,7 @@ export const SudokuProvider = ({ children }) => {
   const [currInputNumber, setCurrInputNumber] = useState(-1); // Active number (-1 means none)
   const [activeCell, setActiveCell] = useState(null); // Active cell (null means none)
   const [inputMode, setInputMode] = useState("noInput"); // Modes: "noInput", "numberFirst", "cellFirst"
+  const [highlightNumber, setHighlightNumber] = useState(-1);
 
   // Whenever the game state changes, update localStorage (example)
   useEffect(() => {
@@ -103,6 +104,7 @@ export const SudokuProvider = ({ children }) => {
     console.log("Handle Number Click:" + num);
     if (inputMode === "numberFirst" && currInputNumber === num) {
       // Deactivate number-first mode if the same number is clicked again
+
       resetInputMode();
     } else if (
       inputMode === "noInput" ||
@@ -113,8 +115,9 @@ export const SudokuProvider = ({ children }) => {
       setActiveCell(null); // Deactivate any active cell
       setInputMode("numberFirst");
     } else if (inputMode === "cellFirst") {
-      // In cell-first mode, update the cell immediately
-      updateCell(activeCell.row, activeCell.col, num);
+      if (solutionGrid[activeCell.row][activeCell.col] == num)
+        updateCell(activeCell.row, activeCell.col, 0);
+      else updateCell(activeCell.row, activeCell.col, num);
     }
   };
 
@@ -164,6 +167,7 @@ export const SudokuProvider = ({ children }) => {
   const resetInputMode = () => {
     setInputMode("noInput");
     setCurrInputNumber(-1);
+    setHighlightNumber(-1);
     setActiveCell(null);
   };
 
@@ -187,11 +191,14 @@ export const SudokuProvider = ({ children }) => {
           `[data-row="${i}"][data-col="${j}"]`
         );
         if (cellElement) {
-          cellElement.classList.remove("active-cell", "neighbor-cell");
+          cellElement.classList.remove(
+            "active-cell",
+            "neighbor-cell",
+            "same-number-cell"
+          );
         }
       }
     }
-
     // Highlight the active cell and its neighbors
     if (activeCell) {
       const { row, col } = activeCell;
@@ -205,24 +212,77 @@ export const SudokuProvider = ({ children }) => {
       }
 
       // Highlight neighboring cells in the same row and column
-      for (let i = 0; i < 9; i++) {
-        // Row neighbors
-        if (i !== col) {
-          const rowNeighbor = document.querySelector(
-            `[data-row="${row}"][data-col="${i}"]`
-          );
-          if (rowNeighbor) {
-            rowNeighbor.classList.add("neighbor-cell");
+      if (settings.highlightRowCol) {
+        for (let i = 0; i < 9; i++) {
+          // Row neighbors
+          if (i !== col) {
+            const rowNeighbor = document.querySelector(
+              `[data-row="${row}"][data-col="${i}"]`
+            );
+            if (rowNeighbor) {
+              rowNeighbor.classList.add("neighbor-cell");
+            }
+          }
+
+          // Column neighbors
+          if (i !== row) {
+            const colNeighbor = document.querySelector(
+              `[data-row="${i}"][data-col="${col}"]`
+            );
+            if (colNeighbor) {
+              colNeighbor.classList.add("neighbor-cell");
+            }
           }
         }
+      }
+    }
+  };
 
-        // Column neighbors
-        if (i !== row) {
-          const colNeighbor = document.querySelector(
-            `[data-row="${i}"][data-col="${col}"]`
-          );
-          if (colNeighbor) {
-            colNeighbor.classList.add("neighbor-cell");
+  useEffect(() => {
+    highlightSameDigit();
+  }, [activeCell, currInputNumber, highlightNumber, solutionGrid]);
+
+  // Highlight cells with the same number
+  const highlightSameDigit = () => {
+    // clear all highlights
+    for (let i = 0; i < 9; i++) {
+      for (let j = 0; j < 9; j++) {
+        const cellElement = document.querySelector(
+          `[data-row="${i}"][data-col="${j}"]`
+        );
+        if (cellElement) {
+          cellElement.classList.remove("same-number-cell");
+        }
+      }
+    }
+
+    if (!settings.highlightSameDigits) return; // Exit if the feature is disabled
+
+    let activeNumber = -1;
+
+    if (inputMode == "cellFirst") {
+      if (activeCell) {
+        const { row, col } = activeCell;
+        activeNumber = solutionGrid[row][col];
+      }
+    } else if (inputMode == "numberFirst") {
+      activeNumber = currInputNumber;
+    } else {
+      activeNumber == -1;
+    }
+    if (activeNumber <= 0) return;
+    // Iterate through all cells to update the highlight state
+    for (let i = 0; i < 9; i++) {
+      for (let j = 0; j < 9; j++) {
+        const cellElement = document.querySelector(
+          `[data-row="${i}"][data-col="${j}"]`
+        );
+
+        if (cellElement) {
+          if (solutionGrid[i][j] == activeNumber) {
+            cellElement.classList.add("same-number-cell");
+          } else {
+            cellElement.classList.remove("same-number-cell");
           }
         }
       }
@@ -268,7 +328,7 @@ export const SudokuProvider = ({ children }) => {
     // Update grids
     setSudokuGrid(newGrid);
     setSolutionGrid(newGrid.map((row) => row.slice())); // Create a deep copy for the solution grid
-
+    setHintGrid(EmptyHintGrid());
     // Clear saved state and switch to the game screen
     localStorage.removeItem("sudokuState");
     switchScreen("game");

@@ -5,10 +5,10 @@ const SettingsContext = createContext();
 
 export const SettingsProvider = ({ children }) => {
   const [settings, setSettings] = useState({
-    // highlightRowCol: true, // Highlight row and column based on input
+    highlightRowCol: true, // Highlight row and column based on input
     showRemainingDigits: true, // Show remaining digits count
     highlightErrors: true, // Highlight errors
-    // highlightSameDigits: true, // Highlight cells with the same digit
+    highlightSameDigits: true, // Highlight cells with the same digit
     // autoNoteRemoval: true, // Automatically remove conflicting notes
     showTimer: true, // Show the timer
     // holdToErase: true, // Allow holding cells to erase them
