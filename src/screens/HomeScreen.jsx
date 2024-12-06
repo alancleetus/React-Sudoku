@@ -8,6 +8,8 @@ function HomeScreen() {
   const resumeDiff = prevState ? prevState.gameDifficulty : "";
   const resumeTime = prevState ? prevState.elapsedTime : "";
 
+  const savedState = JSON.parse(localStorage.getItem("sudokuState"));
+  console.log("savedState:" + savedState);
   // Format elapsed time into mm:ss
   const formatTime = (timeInSeconds) => {
     const minutes = Math.floor(timeInSeconds / 60);
@@ -28,15 +30,17 @@ function HomeScreen() {
         </button>
       </div>
       <div>
-        <button className="home-screen-buttons" onClick={() => resumeGame()}>
-          <span>Resume Game</span>
-          <br />
-          <span>
-            {resumeDiff !== ""
-              ? `${resumeDiff} - ${formatTime(resumeTime)}`
-              : ""}
-          </span>
-        </button>
+        {prevState && (
+          <button className="home-screen-buttons" onClick={() => resumeGame()}>
+            <span>Resume Game</span>
+            <br />
+            <span>
+              {resumeDiff !== ""
+                ? `${resumeDiff} - ${formatTime(resumeTime)}`
+                : ""}
+            </span>
+          </button>
+        )}
       </div>
       <button className="home-screen-buttons" onClick={handleSettingsClick}>
         Settings

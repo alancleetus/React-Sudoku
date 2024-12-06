@@ -24,6 +24,29 @@ export const SudokuProvider = ({ children }) => {
   const [activeCell, setActiveCell] = useState(null); // Active cell (null means none)
   const [inputMode, setInputMode] = useState("noInput"); // Modes: "noInput", "numberFirst", "cellFirst"
 
+  // Whenever the game state changes, update localStorage (example)
+  useEffect(() => {
+    const gameState = {
+      gameDifficulty: gameDifficulty,
+      elapsedTime: 0, // Assuming you will update this via your TimerContext
+      sudokuGrid: sudokuGrid,
+      solutionGrid: solutionGrid,
+      hintGrid: hintGrid,
+      settings: settings,
+      initialSettings: initialSettings,
+    };
+
+    console.log("Saving game state to localStorage:", gameState); // Debug log
+    localStorage.setItem("sudokuState", JSON.stringify(gameState));
+  }, [
+    sudokuGrid,
+    solutionGrid,
+    hintGrid,
+    gameDifficulty,
+    settings,
+    initialSettings,
+  ]); // This will trigger on any of these state changes
+
   const updateCell = (row, col, value) => {
     if (row < 0 || row >= 9 || col < 0 || col >= 9) {
       console.error("Invalid row or column index");

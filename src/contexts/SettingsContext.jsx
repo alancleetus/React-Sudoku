@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const SettingsContext = createContext();
 
@@ -24,6 +24,15 @@ export const SettingsProvider = ({ children }) => {
       [key]: !prev[key],
     }));
   };
+  useEffect(() => {
+    console.log("saving timer...");
+    const savedState = JSON.parse(localStorage.getItem("sudokuState"));
+
+    const gameState = { ...savedState, settings, initialSettings };
+
+    console.log("Saving settings to localStorage:", gameState); // Debug log
+    localStorage.setItem("sudokuState", JSON.stringify(gameState));
+  }, [settings, initialSettings]); // This will trigger on any of these state changes
 
   const toggleInitialSetting = (key) => {
     setInitialSettings((prev) => ({
@@ -38,6 +47,7 @@ export const SettingsProvider = ({ children }) => {
         settings,
         toggleSetting,
         initialSettings,
+        setSettings,
         setInitialSettings,
         toggleInitialSetting,
       }}
@@ -47,8 +57,9 @@ export const SettingsProvider = ({ children }) => {
   );
 };
 
-SettingsContext.propTypes = {
-  children: PropTypes.node.isRequired, // Validate children
+// Prop validation should be here for SettingsProvider
+SettingsProvider.propTypes = {
+  children: PropTypes.node.isRequired, // Validate children prop for SettingsProvider
 };
 
 export const useSettingsContext = () => useContext(SettingsContext);

@@ -27,6 +27,16 @@ export const TimerProvider = ({ children }) => {
   const getIsTimerActive = () => isTimerActive;
   const updateTimer = (time) => setElapsedTime(time);
 
+  useEffect(() => {
+    console.log("saving timer...");
+    const savedState = JSON.parse(localStorage.getItem("sudokuState"));
+
+    const gameState = { ...savedState, elapsedTime };
+
+    console.log("Saving timer to localStorage:", gameState); // Debug log
+    localStorage.setItem("sudokuState", JSON.stringify(gameState));
+  }, [elapsedTime]); // This will trigger on any of these state changes
+
   return (
     <TimerContext.Provider
       value={{
