@@ -8,8 +8,9 @@ export const SettingsProvider = ({ children }) => {
     highlightRowCol: true, // Highlight row and column based on input
     showRemainingDigits: true, // Show remaining digits count
     highlightErrors: true, // Highlight errors
+    highlightNoteErrors: true, // Highlight note errors
     highlightSameDigits: true, // Highlight cells with the same digit
-    // autoNoteRemoval: true, // Automatically remove conflicting notes
+    autoRemoveInvalidNotes: true, // Automatically remove conflicting notes
     showTimer: true, // Show the timer
     // holdToErase: true, // Allow holding cells to erase them
     disableDigitWhenNine: true, // Disable a digit when its count reaches 9

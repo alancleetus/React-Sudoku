@@ -1,6 +1,10 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { validateSudokuGrid, checkSolution } from "../utils/SudokuValidator";
+import {
+  validateSudokuGrid,
+  checkSolution,
+  validateNewCellValue,
+} from "../utils/SudokuValidator";
 import { EmptyGrid, EmptyHintGrid } from "../constants/sudokuConstants";
 import { createContext, useContext } from "react";
 import { useTimerContext } from "./TimerContext";
@@ -83,6 +87,10 @@ export const SudokuProvider = ({ children }) => {
           : (newHintGrid[row][col][value] = true);
       }
       setHintGrid(newHintGrid);
+
+      // After updating the hints, validate each hint value and handle errors
+      const validatedHintsGrid = validateHints(newHintGrid);
+      setHintGrid(validatedHintsGrid);
     } else {
       const newGrid = [...solutionGrid];
       newGrid[row][col] = value;
@@ -97,7 +105,54 @@ export const SudokuProvider = ({ children }) => {
       }
 
       setInvalidCells(validateSudokuGrid(newGrid)); // Revalidate after update
+
+      validateHints(hintGrid);
     }
+  };
+
+  // Function to validate hints and apply error handling
+  const validateHints = (newHintGrid) => {
+    console.log("validateHints");
+
+    for (let row = 0; row < 9; row++) {
+      for (let col = 0; col < 9; col++) {
+        const cellElement = document.querySelector(
+          `[data-row="${row}"][data-col="${col}"]`
+        );
+
+        if (cellElement?.children[1]) {
+          // Check if there are hints for this cell
+          for (let num = 1; num <= 9; num++) {
+            const hintIsValid = validateNewCellValue(
+              solutionGrid,
+              row,
+              col,
+              num
+            );
+            const hintCell = cellElement.children[1].querySelector(
+              `[data-hint="${num}"]`
+            );
+
+            if (hintCell) {
+              if (!hintIsValid) {
+                console.log(hintCell);
+                // Invalid hint, handle based on settings
+                if (settings.highlightNoteErrors) {
+                  // Mark invalid hints as red
+                  hintCell.classList.add("red");
+                }
+                if (settings.autoRemoveInvalidNotes)
+                  hintCell.classList.remove("shown");
+              } else {
+                // Valid hint, ensure it's shown
+                hintCell.classList.remove("red");
+              }
+            }
+          }
+        }
+      }
+    }
+    return newHintGrid;
   };
 
   const handleNumberClick = (num) => {
@@ -175,6 +230,14 @@ export const SudokuProvider = ({ children }) => {
   }, [invalidCells]);
 
   useEffect(() => {
+    if (currentScreen != "game") resetInputMode();
+    else {
+      markInvalidCells();
+      validateHints(hintGrid);
+    }
+  }, [currentScreen]);
+
+  useEffect(() => {
     markActiveCell();
   }, [activeCell]);
 
@@ -238,10 +301,6 @@ export const SudokuProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (currentScreen != "game") resetInputMode();
-  }, [currentScreen]);
-
-  useEffect(() => {
     highlightSameDigit();
   }, [activeCell, currInputNumber, highlightNumber, solutionGrid]);
 
@@ -294,9 +353,6 @@ export const SudokuProvider = ({ children }) => {
 
   const markInvalidCells = () => {
     if (settings.highlightErrors) {
-      // console.log("markInvalidCells");
-      // console.log("invalidCells" + invalidCells);
-
       // Apply visual updates
       for (let i = 0; i < 9; i++) {
         for (let j = 0; j < 9; j++) {

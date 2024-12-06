@@ -41,16 +41,19 @@ export default function InputCell({ row, col }) {
       <div>{cellValue}</div>
       {!cellValue && notes.length > 0 && (
         <div className="cell-notes">
-          {notes.sort().map((note) => (
-            <span
-              key={note}
-              className={
-                hintGrid[row][col][note] === true ? "note shown" : "note"
-              }
-            >
-              {note}
-            </span>
-          ))}
+          {notes.sort().map((note) => {
+            return (
+              <span
+                key={note}
+                data-hint={note}
+                className={
+                  hintGrid[row][col][note] === true ? "note shown" : "note"
+                }
+              >
+                {note}
+              </span>
+            );
+          })}
         </div>
       )}
     </div>
