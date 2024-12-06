@@ -1,6 +1,9 @@
 import DifficultySelector from "../components/DifficultyComponent";
+import { EmptyGrid } from "../constants/sudokuConstants";
 import { useScreenContext } from "../contexts/ScreenContext";
 import { useSudokuContext } from "../contexts/SudokuProvider";
+import isEqual from "lodash/isEqual";
+
 function HomeScreen() {
   const { handleSettingsClick } = useScreenContext();
   const { startNewGame, resumeGame } = useSudokuContext();
@@ -8,8 +11,6 @@ function HomeScreen() {
   const resumeDiff = prevState ? prevState.gameDifficulty : "";
   const resumeTime = prevState ? prevState.elapsedTime : "";
 
-  const savedState = JSON.parse(localStorage.getItem("sudokuState"));
-  console.log("savedState:" + savedState);
   // Format elapsed time into mm:ss
   const formatTime = (timeInSeconds) => {
     const minutes = Math.floor(timeInSeconds / 60);
@@ -30,7 +31,7 @@ function HomeScreen() {
         </button>
       </div>
       <div>
-        {prevState && (
+        {!isEqual(prevState.sudokuGrid, EmptyGrid()) && (
           <button className="home-screen-buttons" onClick={() => resumeGame()}>
             <span>Resume Game</span>
             <br />
