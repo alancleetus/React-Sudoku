@@ -1,7 +1,7 @@
 /* Flexbox layout for action buttons */
 .action-buttons {
   display: flex;
-  justify-content: space-around; /* Spread buttons evenly */
+  justify-content: space-between; /* Spread buttons evenly */
   gap: 15px;
   margin-top: 20px;
   background-color: var(--editable-cell-bg);
@@ -11,14 +11,18 @@
 }
 .action-buttons > .active {
   color: var(--primary-color); /* Active state for the 'Clear' button */
-  text-decoration: underline;
-  transition: all 0.3s ease;
+
+  background-color: var(--secondary-color);
+  border-color: var(--primary-color);
 }
 .action-buttons button {
   background-color: var(--editable-cell-bg);
   color: var(--text-color);
-
+  padding: 0px 5px;
   font-size: 1rem;
   cursor: pointer;
   border: none;
+  border: 1px solid transparent;
+
+  transition: all 0.2s ease;
 }
