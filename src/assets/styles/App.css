@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;700&display=swap");
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -69,11 +71,13 @@ input[type="number"] {
   line-height: 2em;
   transition: all 0.2s ease;
 }
-
 .sudoku-cell.locked-cell {
   font-weight: bold;
   background-color: var(--locked-cell-bg);
   color: var(--locked-cell-text-color);
+
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
 }
 
 .sudoku-cell.editable-cell {
@@ -111,6 +115,10 @@ input[type="number"] {
   opacity: 100;
 }
 
+.note.shown.red {
+  color: red;
+}
+
 .sudoku-row {
   display: flex;
   justify-content: center;
@@ -127,6 +135,10 @@ input[type="number"] {
 .sudoku-cell.editable-cell.active-cell {
   background: var(--primary-color);
   color: var(--secondary-color);
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  border-radius: 3px;
+  border-color: rgba(0, 0, 0, 0.3);
 }
 
 .sudoku-cell.same-number-cell {
