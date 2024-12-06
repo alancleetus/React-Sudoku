@@ -24,7 +24,6 @@ export const TimerProvider = ({ children }) => {
   const pauseTimer = () => setTimerActive(false);
   const resumeTimer = () => setTimerActive(true);
   const toggleTimer = () => setTimerActive((prev) => !prev);
-  const getIsTimerActive = () => isTimerActive;
   const updateTimer = (time) => setElapsedTime(time);
 
   useEffect(() => {
@@ -46,7 +45,7 @@ export const TimerProvider = ({ children }) => {
         resumeTimer,
         updateTimer,
         toggleTimer,
-        getIsTimerActive,
+        isTimerActive,
       }}
     >
       {children}

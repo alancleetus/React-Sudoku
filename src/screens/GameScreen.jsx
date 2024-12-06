@@ -16,6 +16,7 @@ function GameScreen() {
   const { gameDifficulty } = useGameDifficultyContext();
 
   const { settings } = useSettingsContext();
+
   return (
     <div>
       <div style={{ display: "flex" }}>

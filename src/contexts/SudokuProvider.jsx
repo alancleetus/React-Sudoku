@@ -11,7 +11,7 @@ import GenerateSudoku from "../utils/GenerateSudoku";
 
 const SudokuContext = createContext(0);
 export const SudokuProvider = ({ children }) => {
-  const { switchScreen } = useScreenContext();
+  const { switchScreen, currentScreen } = useScreenContext();
   const { gameDifficulty, updateGameDifficulty } = useGameDifficultyContext();
   const { resetTimer, pauseTimer, updateTimer } = useTimerContext();
   const { settings, initialSettings, setSettings, setInitialSettings } =
@@ -122,7 +122,6 @@ export const SudokuProvider = ({ children }) => {
   };
 
   const handleCellClick = (row, col) => {
-    console.log("handleCellClick");
     if (sudokuGrid[row][col] > 0) {
       resetInputMode();
       return;
@@ -179,9 +178,9 @@ export const SudokuProvider = ({ children }) => {
     markActiveCell();
   }, [activeCell]);
 
-  useEffect(() => {
-    console.log("inputMode:" + inputMode);
-  }, [inputMode]);
+  // useEffect(() => {
+  //   console.log("inputMode:" + inputMode);
+  // }, [inputMode]);
 
   const markActiveCell = () => {
     // Clear previous highlights
@@ -237,6 +236,10 @@ export const SudokuProvider = ({ children }) => {
       }
     }
   };
+
+  useEffect(() => {
+    if (currentScreen != "game") resetInputMode();
+  }, [currentScreen]);
 
   useEffect(() => {
     highlightSameDigit();
