@@ -135,7 +135,7 @@ export const SudokuProvider = ({ children }) => {
 
             if (hintCell) {
               if (!hintIsValid) {
-                console.log(hintCell);
+                //console.log(hintCell);
                 // Invalid hint, handle based on settings
                 if (settings.highlightNoteErrors) {
                   // Mark invalid hints as red
@@ -177,10 +177,100 @@ export const SudokuProvider = ({ children }) => {
   };
 
   const handleCellClick = (row, col) => {
+    // Check if the clicked cell is non-editable (pre-filled in the original grid)
     if (sudokuGrid[row][col] > 0) {
-      resetInputMode();
+      console.debug("Clicked on a prefilled cell at", { row, col });
+
+      if (!settings.allowPrefilledNumberInteraction) {
+        console.debug("Prefilled number interaction is disabled. Exiting.");
+        return;
+      }
+
+      if (inputMode === "noInput") {
+        // No input mode: toggle highlight for pre-filled numbers
+        console.debug("Input mode is 'noInput'.");
+        if (highlightNumber === sudokuGrid[row][col]) {
+          // Already highlighted: reset highlight
+          console.debug(
+            "Prefilled number matches the highlighted number. Resetting highlight."
+          );
+          resetInputMode();
+        } else {
+          // Highlight other same numbers
+          console.debug(
+            "Prefilled number does not match the highlighted number. Highlighting prefilled number:",
+            sudokuGrid[row][col]
+          );
+          setHighlightNumber(sudokuGrid[row][col]);
+          highlightSameDigit();
+        }
+      } else if (inputMode === "numberFirst") {
+        // Number-first input mode
+        console.debug("Input mode is 'numberFirst'.");
+        if (settings.resetInputNumberWhenClickedOnMatchingPreFilledNumber) {
+          if (currInputNumber === sudokuGrid[row][col]) {
+            // Prefilled number matches current input number: reset input mode
+            console.debug(
+              "Prefilled number matches the current input number. Resetting input mode."
+            );
+            resetInputMode();
+          } else {
+            // Prefilled number does not match: reset and highlight the prefilled number
+
+            if (settings.resetInputNumberWhenClickedOnAnyPreFilledNumber) {
+              console.debug(
+                "Prefilled number does not match the current input number. Resetting input mode and highlighting prefilled number:",
+                sudokuGrid[row][col]
+              );
+              resetInputMode();
+              setHighlightNumber(sudokuGrid[row][col]);
+              highlightSameDigit();
+            }
+          }
+        } else {
+          console.debug(
+            "Setting 'resetInputNumberWhenClickedOnMatchingPreFilledNumber' is disabled. No action taken."
+          );
+        }
+      } else if (inputMode === "cellFirst") {
+        // Cell-first input mode
+        console.debug("Input mode is 'cellFirst'.");
+        if (settings.resetActiveCellWhenClickedOnMatchingPreFilledNumber) {
+          if (
+            activeCell &&
+            solutionGrid[activeCell.row][activeCell.col] ===
+              sudokuGrid[row][col]
+          ) {
+            // Prefilled number matches active cell number: reset input mode
+            console.debug(
+              "Prefilled number matches the active cell number. Resetting input mode."
+            );
+            resetInputMode();
+          } else {
+            // Prefilled number does not match: reset and highlight the prefilled number
+
+            if (settings.resetActiveCellWhenClickedOnAnyPreFilledNumber) {
+              console.debug(
+                "Prefilled number does not match the active cell number. Resetting input mode and highlighting prefilled number:",
+                solutionGrid[row][col]
+              );
+              resetInputMode();
+              setHighlightNumber(solutionGrid[row][col]);
+              highlightSameDigit();
+            }
+          }
+        } else {
+          console.debug(
+            "Setting 'resetActiveCellWhenClickedOnMatchingPreFilledNumber' is disabled. No action taken."
+          );
+        }
+      } else {
+        console.debug("Unhandled input mode:", inputMode);
+      }
+
       return;
     }
+
     const isSameCell =
       activeCell && activeCell.row === row && activeCell.col === col;
 
@@ -329,9 +419,12 @@ export const SudokuProvider = ({ children }) => {
       }
     } else if (inputMode == "numberFirst") {
       activeNumber = currInputNumber;
+    } else if (inputMode == "noInput") {
+      activeNumber = highlightNumber;
     } else {
-      activeNumber == -1;
+      activeNumber = -1;
     }
+
     if (activeNumber <= 0) return;
     // Iterate through all cells to update the highlight state
     for (let i = 0; i < 9; i++) {

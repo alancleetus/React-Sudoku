@@ -14,6 +14,11 @@ export const SettingsProvider = ({ children }) => {
     showTimer: true, // Show the timer
     // holdToErase: true, // Allow holding cells to erase them
     disableDigitWhenNine: true, // Disable a digit when its count reaches 9
+    allowPrefilledNumberInteraction: true,
+    resetInputNumberWhenClickedOnMatchingPreFilledNumber: true,
+    resetInputNumberWhenClickedOnAnyPreFilledNumber: true,
+    resetActiveCellWhenClickedOnMatchingPreFilledNumber: true,
+    resetActiveCellWhenClickedOnAnyPreFilledNumber: true,
   });
   const [initialSettings, setInitialSettings] = useState({
     pencilMode: true, // Enable or disable pencil mode
