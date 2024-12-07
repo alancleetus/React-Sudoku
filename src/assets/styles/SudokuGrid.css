@@ -1,0 +1,77 @@
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+#sudoku-game-grid {
+  background-color: #ccd3dc;
+  padding: 1px;
+  border-radius: 2px;
+}
+
+.sudoku-row {
+  display: flex;
+  justify-content: center;
+}
+
+.sudoku-cell {
+  width: 2em;
+  height: 2em;
+  border: 1px solid #ccd3dc;
+  padding: 3px;
+  text-align: center;
+  line-height: 2em;
+  transition: all 0.2s ease;
+}
+.sudoku-cell.locked-cell {
+  font-weight: bold;
+  background-color: var(--locked-cell-bg);
+  color: var(--locked-cell-text-color);
+
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+.sudoku-cell.editable-cell {
+  /* font-weight: bold; */
+  background-color: var(--editable-cell-bg);
+  color: var(--editable-cell-text-color);
+  cursor: pointer;
+}
+
+.sudoku-cell.right-margin {
+  margin-right: 1px; /* Adjust the gap size as needed */
+}
+
+.sudoku-cell.bottom-margin {
+  margin-bottom: 1px; /* Adjust the gap size as needed */
+}
+
+.sudoku-cell.editable-cell.active-cell {
+  background: var(--primary-color);
+  color: var(--secondary-color);
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  border-radius: 3px;
+  border-color: rgba(0, 0, 0, 0.3);
+}
+
+.sudoku-cell.same-number-cell {
+  /* border-color: var(--primary-color); */
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+}
+.sudoku-cell.neighbor-cell {
+  /* background: var(--primary-color);
+    background-color: var(--secondary-color);
+     */
+  border-color: var(--primary-color);
+  background-color: var(--secondary-color);
+  color: black;
+}
+
+.sudoku-cell.red {
+  background-color: red;
+  color: white;
+}

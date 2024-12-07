@@ -6,20 +6,22 @@ function SettingsPage() {
   return (
     <div>
       <h1>Settings</h1>
-      <ul>
-        {Object.keys(settings).map((key) => (
-          <li key={key}>
-            <label>
-              <input
-                type="checkbox"
-                checked={settings[key]}
-                onChange={() => toggleSetting(key)}
-              />
-              {formatSettingKey(key)}
-            </label>
-          </li>
-        ))}
-      </ul>
+      <div className="settings-div">
+        <ul id="settings-ul">
+          {Object.keys(settings).map((key) => (
+            <li key={key}>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={settings[key]}
+                  onChange={() => toggleSetting(key)}
+                />
+                {formatSettingKey(key)}
+              </label>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

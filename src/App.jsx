@@ -1,5 +1,7 @@
 import "./assets/styles/App.css";
 import "./assets/styles/theme.css";
+import "./assets/styles/SudokuGrid.css";
+import "./assets/styles/Notes.css";
 
 import { TimerProvider } from "./contexts/TimerContext";
 import { GameDifficultyProvider } from "./contexts/GameDifficultyProvider";
