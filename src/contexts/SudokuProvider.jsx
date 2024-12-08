@@ -31,14 +31,80 @@ export const SudokuProvider = ({ children }) => {
   const { gameHistory, saveGameToHistory, getGameFromHistory } =
     useGameHistoryContext();
   const [gameId, setGameId] = useState(() => Date.now());
+
   const [sudokuGrid, setSudokuGrid] = useState(() => EmptyGrid());
   const [solutionGrid, setSolutionGrid] = useState(() => EmptyGrid());
   const [hintGrid, setHintGrid] = useState(() => EmptyHintGrid());
+
   const [invalidCells, setInvalidCells] = useState(new Set()); // Track invalid cells
   const [currInputNumber, setCurrInputNumber] = useState(-1); // Active number (-1 means none)
   const [activeCell, setActiveCell] = useState(null); // Active cell (null means none)
   const [inputMode, setInputMode] = useState("noInput"); // Modes: "noInput", "numberFirst", "cellFirst"
   const [highlightNumber, setHighlightNumber] = useState(-1);
+
+  // History and future stacks for undo/redo
+  const [history, setHistory] = useState([]);
+  const [future, setFuture] = useState([]);
+
+  const saveToHistory = () => {
+    setHistory((prev) => [
+      ...prev,
+      {
+        sudokuGrid: JSON.parse(JSON.stringify(sudokuGrid)),
+        solutionGrid: JSON.parse(JSON.stringify(solutionGrid)),
+        hintGrid: JSON.parse(JSON.stringify(hintGrid)),
+      },
+    ]);
+    setFuture([]); // Clear redo stack on new action
+  };
+
+  useEffect(() => {
+    console.log("history: ", history);
+    console.log("future: ", future);
+  }, [history, future]);
+  const undo = () => {
+    if (history.length === 0) return;
+
+    const lastState = history[history.length - 1];
+    setHistory((prev) => prev.slice(0, -1)); // Remove last state from history
+
+    // Push current state to future
+    setFuture((prev) => [
+      {
+        sudokuGrid: JSON.parse(JSON.stringify(sudokuGrid)),
+        solutionGrid: JSON.parse(JSON.stringify(solutionGrid)),
+        hintGrid: JSON.parse(JSON.stringify(hintGrid)),
+      },
+      ...prev,
+    ]);
+
+    // Restore the last state
+    setSudokuGrid(lastState.sudokuGrid);
+    setSolutionGrid(lastState.solutionGrid);
+    setHintGrid(lastState.hintGrid);
+  };
+
+  const redo = () => {
+    if (future.length === 0) return;
+
+    const nextState = future[0];
+    setFuture((prev) => prev.slice(1)); // Remove first state from future
+
+    // Push current state to history
+    setHistory((prev) => [
+      ...prev,
+      {
+        sudokuGrid: JSON.parse(JSON.stringify(sudokuGrid)),
+        solutionGrid: JSON.parse(JSON.stringify(solutionGrid)),
+        hintGrid: JSON.parse(JSON.stringify(hintGrid)),
+      },
+    ]);
+
+    // Restore the next state
+    setSudokuGrid(nextState.sudokuGrid);
+    setSolutionGrid(nextState.solutionGrid);
+    setHintGrid(nextState.hintGrid);
+  };
 
   // Whenever the game state changes, update localStorage
   useEffect(() => {
@@ -71,6 +137,7 @@ export const SudokuProvider = ({ children }) => {
       return;
     }
 
+    saveToHistory(); // Save the current state for undo/redo
     //console.log("updating solution");
     //console.log("row:" + row + ", col:" + col + ", val:" + value);
 
@@ -439,6 +506,8 @@ export const SudokuProvider = ({ children }) => {
         setHintGrid,
         gameHistory,
         loadHistoricalGame,
+        undo,
+        redo,
       }}
     >
       {children}

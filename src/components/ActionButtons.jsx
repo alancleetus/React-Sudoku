@@ -10,6 +10,7 @@ import { useSettingsContext } from "../contexts/SettingsContext";
 function ActionButtons() {
   const { currInputNumber, handleNumberClick } = useSudokuContext();
   const { initialSettings, toggleInitialSetting } = useSettingsContext();
+  const { undo, redo } = useSudokuContext();
   return (
     <div className="action-buttons">
       <button
@@ -18,10 +19,10 @@ function ActionButtons() {
       >
         Clear <AiOutlineClear />
       </button>
-      <button className="undo-button">
+      <button className="undo-button" onClick={() => undo()}>
         Undo <LiaUndoAltSolid />
       </button>
-      <button className="redo-button">
+      <button className="redo-button" onClick={() => redo()}>
         Redo <LiaRedoAltSolid />
       </button>
       <button
