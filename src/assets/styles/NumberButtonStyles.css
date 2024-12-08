@@ -9,8 +9,9 @@
   flex-wrap: wrap;
   gap: 10px;
   row-gap: 10px;
-  max-width: 300px;
+  max-width: calc(5 * 3em);
   justify-content: center;
+  font-size: var(--font-size-base); /* Maintain consistent font size */
 }
 
 .button__badge {
@@ -18,26 +19,32 @@
   border-radius: 50%;
   color: white;
   padding: 1px 4px;
-  font-size: 10px;
+  font-size: var(--font-size-xsmall);
+  width: var(--font-size-small);
+
+  font-weight: 400;
   position: absolute;
-  top: -3px;
-  right: -3px;
+  top: calc(-1 * var(--font-size-small) / 2);
+  right: calc(-1 * var(--font-size-small) / 2);
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 button.num-button {
   border-radius: 8px;
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
+
+  width: 2em;
+  height: 2em;
+
+  /* padding: clamp(0.4em, 2vw, 0.8em) clamp(0.8em, 3vw, 1.5em); Responsive padding */
+  font-size: var(--font-size-base); /* Maintain consistent font size */
+  font-weight: 600;
   font-family: inherit;
   background-color: var(--primary-color);
   color: var(--secondary-color);
   cursor: pointer;
   transition: border-color 0.25s;
   transition: all 0.3s ease;
-
   display: inline-block;
   position: relative;
 }
@@ -46,7 +53,6 @@ button.num-button.active {
   color: var(--primary-color);
   background: var(--secondary-color);
   font-weight: bold;
-
   border-color: var(--primary-color);
 }
 

@@ -4,18 +4,9 @@ import { createContext, useContext, useEffect, useState } from "react";
 const GameHistoryContext = createContext();
 
 export const GameHistoryProvider = ({ children }) => {
-  const [gameHistory, setGameHistory] = useState([]);
-
-  // Load game history from localStorage
-  const loadGameHistory = () => {
-    const savedHistory =
-      JSON.parse(localStorage.getItem("sudokuHistory")) || [];
-    setGameHistory(savedHistory);
-  };
-  useEffect(() => {
-    // Load game history on initialization
-    loadGameHistory();
-  }, []);
+  const [gameHistory, setGameHistory] = useState(
+    JSON.parse(localStorage.getItem("sudokuHistory")) || []
+  );
 
   // Load history from localStorage on mount
   useEffect(() => {
@@ -26,14 +17,17 @@ export const GameHistoryProvider = ({ children }) => {
 
   // Save history to localStorage whenever it changes
   useEffect(() => {
+    console.log("....saving hist....", gameHistory);
     localStorage.setItem("sudokuHistory", JSON.stringify(gameHistory));
   }, [gameHistory]);
 
   // Add or update a game in the history
   const saveGameToHistory = (gameState) => {
+    console.log("....save to hist....", gameState);
     setGameHistory((prevHistory) => {
+      console.log("prevHist:", prevHistory);
       const existingIndex = prevHistory.findIndex(
-        (game) => game.id === gameState.id
+        (game) => game.gameId === gameState.gameId
       );
       if (existingIndex !== -1) {
         // Update existing game
@@ -51,19 +45,15 @@ export const GameHistoryProvider = ({ children }) => {
 
   // Get a specific game by ID
   const getGameFromHistory = (gameId) => {
-    return gameHistory.find((game) => game.id === gameId);
-  };
-
-  // Clear the game history
-  const clearGameHistory = () => {
-    setGameHistory([]);
-    localStorage.removeItem("sudokuHistory");
+    console.log("finding game", gameHistory);
+    console.log("finding gameid:", gameId);
+    return gameHistory.find((game) => game.gameId === gameId);
   };
 
   // Delete a specific game by ID
   const deleteGameFromHistory = (gameId) => {
     setGameHistory((prevHistory) =>
-      prevHistory.filter((game) => game.id !== gameId)
+      prevHistory.filter((game) => game.gameId !== gameId)
     );
   };
 
@@ -73,7 +63,6 @@ export const GameHistoryProvider = ({ children }) => {
         gameHistory,
         saveGameToHistory,
         getGameFromHistory,
-        clearGameHistory,
         deleteGameFromHistory,
       }}
     >

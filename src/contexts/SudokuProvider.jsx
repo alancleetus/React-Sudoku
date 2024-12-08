@@ -311,7 +311,7 @@ export const SudokuProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    markInvalidCells();
+    markInvalidCells(invalidCells, settings);
   }, [invalidCells]);
 
   useEffect(() => {
@@ -374,7 +374,7 @@ export const SudokuProvider = ({ children }) => {
     const oldGame = getGameFromHistory(oldGameId);
 
     if (oldGame) {
-      setGameId(oldGame.id);
+      setGameId(oldGame.gameId);
       setCurrInputNumber(-1); // Reset input number
       setSudokuGrid(oldGame.sudokuGrid);
       setSolutionGrid(oldGame.solutionGrid); // Create a deep copy for the solution grid

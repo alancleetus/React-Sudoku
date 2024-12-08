@@ -3,11 +3,14 @@ import DifficultySelector from "../components/DifficultyComponent";
 
 import { useScreenContext } from "../contexts/ScreenContext";
 import { useSudokuContext } from "../contexts/SudokuProvider";
+import { useGameHistoryContext } from "../contexts/GameHistoryProvider";
 
 function HomeScreen() {
-  const { handleSettingsClick, handleHistoryClick } = useScreenContext();
-  const { startNewGame, resumeGame, sudokuGrid, gameHistory } =
-    useSudokuContext();
+  const { handleSettingsClick, handleHistoryClick, currentScreen } =
+    useScreenContext();
+  const { gameHistory } = useGameHistoryContext();
+
+  const { startNewGame, resumeGame, sudokuGrid } = useSudokuContext();
   const [hasSavedGame, setHasSavedGame] = useState(false);
   const [resumeDiff, setResumeDiff] = useState("");
   const [resumeTime, setResumeTime] = useState("");
@@ -27,7 +30,9 @@ function HomeScreen() {
   // Recalculate `hasSavedGame` whenever the component renders
   useEffect(() => {
     setHasSavedGame(checkSavedGame());
-  }, [sudokuGrid]);
+    console.log("has::::", checkSavedGame());
+    console.log("asdasdasd:", gameHistory);
+  }, [sudokuGrid, gameHistory, currentScreen]);
 
   // Format elapsed time into mm:ss
   const formatTime = (timeInSeconds) => {
@@ -49,20 +54,25 @@ function HomeScreen() {
         </button>
       </div>
       {hasSavedGame && (
-        <div>
-          <button className="home-screen-buttons" onClick={() => resumeGame()}>
-            <span>Resume Game</span>
-            <br />
-            <span className="button-subtext">
-              {resumeDiff} - {formatTime(resumeTime)}
-            </span>
+        <>
+          <div>
+            <button
+              className="home-screen-buttons"
+              onClick={() => resumeGame()}
+            >
+              <span>Resume Game</span>
+              <br />
+              <span className="button-subtext">
+                {resumeDiff} - {formatTime(resumeTime)}
+              </span>
+            </button>
+          </div>
+          <button className="home-screen-buttons" onClick={handleHistoryClick}>
+            Incomplete Games
+            <span className="button-subtext">({gameHistory.length})</span>
           </button>
-        </div>
+        </>
       )}
-
-      <button className="home-screen-buttons" onClick={handleHistoryClick}>
-        Incomplete Games
-      </button>
       <button className="home-screen-buttons" onClick={handleSettingsClick}>
         Settings
       </button>

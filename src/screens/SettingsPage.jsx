@@ -5,7 +5,7 @@ function SettingsPage() {
 
   return (
     <div>
-      <h1>Settings</h1>
+      <h3>Settings</h3>
       <div className="settings-div">
         <ul id="settings-ul">
           {Object.keys(settings).map((key) => (

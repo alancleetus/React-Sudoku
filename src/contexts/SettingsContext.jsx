@@ -10,7 +10,7 @@ export const SettingsProvider = ({ children }) => {
     highlightErrors: true, // Highlight errors
     highlightNoteErrors: true, // Highlight note errors
     highlightSameDigits: true, // Highlight cells with the same digit
-    autoRemoveInvalidNotes: true, // Automatically remove conflicting notes
+    autoRemoveInvalidNotes: false, // Automatically remove conflicting notes
     showTimer: true, // Show the timer
     // holdToErase: true, // Allow holding cells to erase them
     disableDigitWhenNine: true, // Disable a digit when its count reaches 9

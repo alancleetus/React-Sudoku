@@ -1,17 +1,24 @@
 .difficulty-selector {
-  display: flex; /* Enables flexbox layout */
+  display: flex;
   align-items: center; /* Vertically centers the items */
   justify-content: center; /* Distributes space between the arrows and the text */
+  gap: 15px; /* Add space between the items */
 }
 
 .difficulty-selector button {
-  flex-grow: 1;
+  flex-grow: 1; /* Ensures buttons fill available space */
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  border: none;
+  padding: 0.5em 1em;
+  font-size: var(--font-size-base); /* Maintain font size across all buttons */
+  transition: background-color 0.3s ease;
 }
 
 .difficulty-selector span {
-  flex-grow: 2;
-  font-size: 1.5em; /* Keep the text size the same as the buttons */
-  text-align: center; /* Ensure text inside span is centered */
-  padding: 0 20px; /* Add horizontal padding to give space around the text */
+  flex-grow: 2; /* Ensures span takes more space than buttons */
+  font-size: var(--font-size-lg); /* Larger font size for the text */
+  text-align: center;
+  padding: 0 20px;
   color: var(--primary-color);
 }

@@ -1,0 +1,116 @@
+.icon-button {
+  float: left;
+}
+
+/* General styles */
+.history-screen {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.history-screen h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.history-title {
+  align-self: center;
+  text-align: center;
+}
+/* History list container */
+.history-list {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Individual card */
+.history-card {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  flex-direction: column;
+}
+
+.history-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+/* Card content */
+
+.card-title {
+  color: #333;
+  border-bottom: 1px solid #ddd;
+  margin: 0px;
+  padding: 10px 15px;
+}
+
+.card-detail {
+  display: flex;
+  justify-content: space-around;
+  font-size: 14px;
+  color: #555;
+  margin: 0px;
+
+  padding: 0px 15px;
+}
+
+/* Card buttons */
+.card-buttons {
+  border-top: 1px solid #ddd;
+  display: flex;
+
+  padding: 10px 5px;
+  text-align: center;
+}
+
+.load-button,
+.delete-button {
+  display: flex;
+  align-items: center; /* Centers items vertically */
+  justify-content: center; /* Centers items horizontally */
+  flex-grow: 1;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.card-detail > p > svg,
+.card-buttons > button > svg {
+  font-size: 1em; /* Matches text size */
+  padding: 0px 5px;
+}
+
+.load-button {
+  background-color: transparent;
+  color: var(--primary-color);
+  flex-grow: 1;
+}
+
+.load-button:hover {
+  background-color: var(--secondary-color);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.delete-button {
+  background-color: transparent;
+  color: #dc3545;
+  flex-grow: 1;
+}
+
+.delete-button:hover {
+  background-color: #e7b2b7;
+}

@@ -8,32 +8,40 @@ const ScreenContext = createContext("home");
 // Create a provider to wrap the app and manage screen state
 export const ScreenProvider = ({ children }) => {
   const [currentScreen, setCurrentScreen] = useState("home");
-  const [previousScreen, setPreviousScreen] = useState("home");
+  const [previousScreen, setPreviousScreen] = useState([currentScreen]);
   const { resumeTimer, pauseTimer } = useTimerContext();
 
   // Function to switch screens, called safely during events or lifecycle
   const switchScreen = (screen) => {
     if (screen !== currentScreen) {
-      setPreviousScreen(currentScreen); // Update previous screen
+      setPreviousScreen((prev) => [currentScreen, ...prev]); // Update previous screen
       setCurrentScreen(screen); // Update the current screen
-
-      // Start or pause the timer depending on the screen
-      if (screen === "game") {
-        resumeTimer();
-      } else {
-        pauseTimer();
-      }
     }
   };
 
-  const handleBackButton = () => switchScreen(previousScreen);
+  const handleBackButton = () => {
+    if (previousScreen.length > 0) {
+      const [newScreen, ...remainingHistory] = previousScreen;
+
+      // Update state immutably
+      setPreviousScreen(remainingHistory);
+      setCurrentScreen(newScreen); // Navigate to the previous screen
+    }
+  };
+
   const handleHomeClick = () => switchScreen("home");
   const handleGameClick = () => switchScreen("game");
   const handleSettingsClick = () => switchScreen("settings");
   const handleHistoryClick = () => switchScreen("history");
 
-  // Avoid any state update directly during render
-  useEffect(() => {}, [currentScreen]);
+  // Timer management based on the screen
+  useEffect(() => {
+    if (currentScreen === "game") {
+      resumeTimer();
+    } else {
+      pauseTimer();
+    }
+  }, [currentScreen, resumeTimer, pauseTimer]);
 
   return (
     <ScreenContext.Provider
@@ -52,6 +60,7 @@ export const ScreenProvider = ({ children }) => {
     </ScreenContext.Provider>
   );
 };
+
 // Custom hook to use the screen context
 export const useScreenContext = () => useContext(ScreenContext);
 

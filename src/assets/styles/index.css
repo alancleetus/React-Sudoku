@@ -1,5 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600;700&display=swap");
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -7,22 +8,29 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --font-sans: "Poppins", sans-serif;
+  --base-font-size: 16px;
+  --font-size-xsmall: clamp(0.5em, 0.7vw, 0.7rem);
+  --font-size-small: clamp(0.7em, 1vw, 1rem);
+  --font-size-medium: clamp(1em, 2vw, 1.5em);
+  --font-size-large: clamp(1.2em, 3vw, 2em);
+  --font-size-xlarge: clamp(16px, 2vw, 24px);
+  --grid-outline-size: 2px;
+  --grid-outline-color: #ccd3dc;
+  /* font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif; */
+  font-family: var(--font-sans);
 }
 
 body {
   margin: 0;
   display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  justify-content: center;
 
   background-color: var(--bg-color);
   color: var(--text-color);
   transition: all 0.3s ease;
-}
-#root {
-  max-width: 600px;
 }
 
 h1 {
@@ -33,7 +41,7 @@ h1 {
 .icon-button {
   background-color: transparent;
   border: none;
-  font-size: 1.5em;
+  font-size: var(--font-size-medium);
   color: var(--primary-color);
   cursor: pointer;
 }

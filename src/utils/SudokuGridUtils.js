@@ -54,7 +54,7 @@ export const markActiveCell = (activeCell, settings) => {
 };
 
 export const markInvalidCells = (invalidCells, settings) => {
-  if (settings?.highlightErrors) {
+  if (settings.highlightErrors) {
     // Apply visual updates
     for (let i = 0; i < 9; i++) {
       for (let j = 0; j < 9; j++) {

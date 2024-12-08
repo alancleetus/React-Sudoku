@@ -3,49 +3,60 @@ input[type="number"] {
   -moz-appearance: textfield;
   appearance: textfield;
 }
+
 #sudoku-game-grid {
-  background-color: #ccd3dc;
+  display: flex;
+  justify-content: center;
   padding: 1px;
-  border-radius: 2px;
+  height: 100%; /* Ensure the grid fits the full height */
+}
+
+#sudoku-grid-inner-container {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--grid-outline-color);
+  width: fit-content;
+  padding: var(--grid-outline-size);
+  border-radius: var(--grid-outline-size);
 }
 
 .sudoku-row {
   display: flex;
   justify-content: center;
+  height: 100%; /* Ensure row fits vertically */
 }
 
 .sudoku-cell {
-  width: 2em;
-  height: 2em;
-  border: 1px solid #ccd3dc;
+  width: clamp(2em, 5vw, 3em); /* Responsive width based on viewport width */
+  height: clamp(2em, 5vw, 3em); /* Responsive height based on viewport width */
+  border: 1px solid var(--grid-outline-color);
   padding: 3px;
   text-align: center;
-  line-height: 2em;
+  line-height: clamp(2em, 5vw, 3em);
   transition: all 0.2s ease;
 }
+
 .sudoku-cell.locked-cell {
   font-weight: bold;
   background-color: var(--locked-cell-bg);
   color: var(--locked-cell-text-color);
-
-  font-family: "Poppins", sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   opacity: 0.85;
 }
 
 .sudoku-cell.editable-cell {
-  /* font-weight: bold; */
   background-color: var(--editable-cell-bg);
   color: var(--editable-cell-text-color);
   cursor: pointer;
 }
 
 .sudoku-cell.right-margin {
-  margin-right: 1px; /* Adjust the gap size as needed */
+  margin-right: var(--grid-outline-size);
 }
 
 .sudoku-cell.bottom-margin {
-  margin-bottom: 1px; /* Adjust the gap size as needed */
+  margin-bottom: var(--grid-outline-size);
 }
 
 .sudoku-cell.editable-cell.active-cell {
@@ -58,14 +69,11 @@ input[type="number"] {
 }
 
 .sudoku-cell.same-number-cell {
-  /* border-color: var(--primary-color); */
   background-color: var(--secondary-color);
   color: var(--primary-color);
 }
+
 .sudoku-cell.neighbor-cell {
-  /* background: var(--primary-color);
-    background-color: var(--secondary-color);
-     */
   border-color: var(--primary-color);
   background-color: var(--secondary-color);
   color: black;
