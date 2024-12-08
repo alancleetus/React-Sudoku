@@ -8,6 +8,12 @@
 svg {
   vertical-align: middle;
 }
+
+.app-container {
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+}
 .navbar {
   width: 90vw;
   display: flex;

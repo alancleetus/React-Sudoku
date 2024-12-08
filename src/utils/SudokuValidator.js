@@ -88,7 +88,7 @@ export const validateSudokuGrid = (SudokuGrid) => {
 
 // Function to validate hints and apply error handling
 export const validateHints = (newHintGrid, solutionGrid, settings) => {
-  console.log("validateHints");
+  //console.log("validateHints");
 
   for (let row = 0; row < 9; row++) {
     for (let col = 0; col < 9; col++) {

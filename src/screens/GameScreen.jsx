@@ -38,7 +38,7 @@ function GameScreen() {
             alignItems: "center", // Centers vertically
           }}
         >
-          <button className="play-pause-button" onClick={toggleTimer}>
+          <button className="play-pause-button" onClick={() => toggleTimer()}>
             {isTimerActive ? <IoIosPause /> : <IoIosPlay />}
           </button>
         </div>

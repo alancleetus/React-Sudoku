@@ -1,9 +1,11 @@
 import PropTypes from "prop-types";
 import { createContext, useContext, useEffect, useState } from "react";
+import { useScreenContext } from "./ScreenContext";
 
 const GameHistoryContext = createContext();
 
 export const GameHistoryProvider = ({ children }) => {
+  const { currentScreen } = useScreenContext();
   const [gameHistory, setGameHistory] = useState(
     JSON.parse(localStorage.getItem("sudokuHistory")) || []
   );
@@ -17,15 +19,16 @@ export const GameHistoryProvider = ({ children }) => {
 
   // Save history to localStorage whenever it changes
   useEffect(() => {
-    console.log("....saving hist....", gameHistory);
+    //console.log("....saving hist....", gameHistory);
     localStorage.setItem("sudokuHistory", JSON.stringify(gameHistory));
   }, [gameHistory]);
 
   // Add or update a game in the history
   const saveGameToHistory = (gameState) => {
-    console.log("....save to hist....", gameState);
+    if (currentScreen == "home") return;
+    //console.log("....save to hist....", gameState);
     setGameHistory((prevHistory) => {
-      console.log("prevHist:", prevHistory);
+      //console.log("prevHist:", prevHistory);
       const existingIndex = prevHistory.findIndex(
         (game) => game.gameId === gameState.gameId
       );
@@ -45,8 +48,8 @@ export const GameHistoryProvider = ({ children }) => {
 
   // Get a specific game by ID
   const getGameFromHistory = (gameId) => {
-    console.log("finding game", gameHistory);
-    console.log("finding gameid:", gameId);
+    //console.log("finding game", gameHistory);
+    //console.log("finding gameid:", gameId);
     return gameHistory.find((game) => game.gameId === gameId);
   };
 

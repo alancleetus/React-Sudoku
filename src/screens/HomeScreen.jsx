@@ -30,8 +30,6 @@ function HomeScreen() {
   // Recalculate `hasSavedGame` whenever the component renders
   useEffect(() => {
     setHasSavedGame(checkSavedGame());
-    console.log("has::::", checkSavedGame());
-    console.log("asdasdasd:", gameHistory);
   }, [sudokuGrid, gameHistory, currentScreen]);
 
   // Format elapsed time into mm:ss

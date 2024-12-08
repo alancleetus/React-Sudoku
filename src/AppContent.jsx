@@ -12,7 +12,7 @@ function AppContent() {
     useScreenContext();
 
   return (
-    <div>
+    <div className="app-container">
       <nav className="navbar">
         <button
           className="icon-button"

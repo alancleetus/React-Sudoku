@@ -6,13 +6,13 @@
   background-color: var(--editable-cell-bg);
   color: var(--text-color);
   height: clamp(40px, 3vw, 50px); /* Responsive height */
-  padding: 0 15px;
+  padding: 15px 15px;
   transition: all 0.3s ease;
 }
 
 .action-buttons > .active {
   color: var(--primary-color); /* Active state for the 'Clear' button */
-  background-color: var(--secondary-color);
+  border-bottom: 2px solid var(--primary-color);
   border-color: var(--primary-color);
 }
 
@@ -22,6 +22,8 @@
   padding: 0 5px;
   font-size: var(--font-size-medium); /* Responsive font size */
   cursor: pointer;
-  border: 1px solid transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
   transition: all 0.2s ease;
+  text-align: center;
 }

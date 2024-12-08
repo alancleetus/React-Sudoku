@@ -1,23 +1,29 @@
 import PropTypes from "prop-types";
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useRef } from "react";
 
 const TimerContext = createContext(0);
 
 export const TimerProvider = ({ children }) => {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [isTimerActive, setTimerActive] = useState(false);
+  const timerRef = useRef(null); // Ref to store the interval ID
 
   useEffect(() => {
-    let timer;
     if (isTimerActive) {
-      timer = setInterval(() => {
+      // Start the timer
+      timerRef.current = setInterval(() => {
         setElapsedTime((prevTime) => prevTime + 1);
       }, 1000);
     } else {
-      clearInterval(timer);
+      // Pause the timer
+      clearInterval(timerRef.current);
+      timerRef.current = null; // Clean up the interval
     }
-    // Cleanup on unmount or when timerActive changes
-    return () => clearInterval(timer);
+    // Cleanup on unmount or isTimerActive changes
+    return () => {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    };
   }, [isTimerActive]);
 
   const resetTimer = () => setElapsedTime(0);
@@ -27,14 +33,11 @@ export const TimerProvider = ({ children }) => {
   const updateTimer = (time) => setElapsedTime(time);
 
   useEffect(() => {
-    //console.log("saving timer...");
-    const savedState = JSON.parse(localStorage.getItem("sudokuState"));
-
+    // Save the elapsed time to localStorage whenever it changes
+    const savedState = JSON.parse(localStorage.getItem("sudokuState")) || {};
     const gameState = { ...savedState, elapsedTime };
-
-    // console.log("Saving timer to localStorage:", gameState); // Debug log
     localStorage.setItem("sudokuState", JSON.stringify(gameState));
-  }, [elapsedTime]); // This will trigger on any of these state changes
+  }, [elapsedTime]);
 
   return (
     <TimerContext.Provider
@@ -54,6 +57,7 @@ export const TimerProvider = ({ children }) => {
 };
 
 TimerProvider.propTypes = {
-  children: PropTypes.node.isRequired, // Validate children
+  children: PropTypes.node.isRequired,
 };
+
 export const useTimerContext = () => useContext(TimerContext);

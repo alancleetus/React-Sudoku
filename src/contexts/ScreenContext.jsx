@@ -41,7 +41,7 @@ export const ScreenProvider = ({ children }) => {
     } else {
       pauseTimer();
     }
-  }, [currentScreen, resumeTimer, pauseTimer]);
+  }, [currentScreen]);
 
   return (
     <ScreenContext.Provider

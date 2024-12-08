@@ -7,7 +7,6 @@
 
 .difficulty-selector button {
   flex-grow: 1; /* Ensures buttons fill available space */
-  background-color: var(--secondary-color);
   color: var(--primary-color);
   border: none;
   padding: 0.5em 1em;

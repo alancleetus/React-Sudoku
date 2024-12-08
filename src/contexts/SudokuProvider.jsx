@@ -54,8 +54,7 @@ export const SudokuProvider = ({ children }) => {
       settings,
       initialSettings,
     };
-    console.log("Saving game state to localStorage:", gameState); // Debug log
-
+    // console.log("Saving game state to localStorage:", gameState); // Debug log
     saveGameToHistory(gameState);
   }, [
     sudokuGrid,
@@ -72,8 +71,8 @@ export const SudokuProvider = ({ children }) => {
       return;
     }
 
-    console.log("updating solution");
-    console.log("row:" + row + ", col:" + col + ", val:" + value);
+    //console.log("updating solution");
+    //console.log("row:" + row + ", col:" + col + ", val:" + value);
 
     if (initialSettings.pencilMode) {
       console.log("updating hints");
