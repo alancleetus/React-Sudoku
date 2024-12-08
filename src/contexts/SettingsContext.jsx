@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
 const SettingsContext = createContext();
 
@@ -21,7 +21,7 @@ export const SettingsProvider = ({ children }) => {
     resetActiveCellWhenClickedOnAnyPreFilledNumber: true,
   });
   const [initialSettings, setInitialSettings] = useState({
-    pencilMode: true, // Enable or disable pencil mode
+    pencilMode: false, // Enable or disable pencil mode
   });
   const toggleSetting = (key) => {
     setSettings((prev) => ({
@@ -29,12 +29,6 @@ export const SettingsProvider = ({ children }) => {
       [key]: !prev[key],
     }));
   };
-  useEffect(() => {
-    const savedState = JSON.parse(localStorage.getItem("sudokuState"));
-    const gameState = { ...savedState, settings, initialSettings };
-    localStorage.setItem("sudokuState", JSON.stringify(gameState));
-  }, [settings, initialSettings]); // This will trigger on any of these state changes
-
   const toggleInitialSetting = (key) => {
     setInitialSettings((prev) => ({
       ...prev,

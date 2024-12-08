@@ -6,6 +6,7 @@ import TimerComponent from "../components/TimerComponent";
 import { useTimerContext } from "../contexts/TimerContext";
 import { useGameDifficultyContext } from "../contexts/GameDifficultyProvider";
 import { useSettingsContext } from "../contexts/SettingsContext";
+import { SlFlag } from "react-icons/sl";
 
 function GameScreen() {
   const { isTimerActive, toggleTimer } = useTimerContext();
@@ -25,7 +26,7 @@ function GameScreen() {
         }}
       >
         <p style={{ flexGrow: "1", textAlign: "left", margin: 0 }}>
-          {gameDifficulty}
+          <SlFlag /> {gameDifficulty}
         </p>
         <div style={{ flexGrow: "2", textAlign: "center", margin: 0 }}>
           {settings.showTimer ? <TimerComponent /> : <></>}

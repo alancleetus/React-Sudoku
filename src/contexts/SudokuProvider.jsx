@@ -12,7 +12,7 @@ import { useGameDifficultyContext } from "./GameDifficultyProvider";
 import { useScreenContext } from "./ScreenContext";
 import { useSettingsContext } from "./SettingsContext";
 import GenerateSudoku from "../utils/GenerateSudoku";
-import { isEqual } from "lodash";
+import { cloneDeep, isEqual } from "lodash";
 import { useGameHistoryContext } from "./GameHistoryProvider";
 import {
   highlightSameDigit,
@@ -47,64 +47,92 @@ export const SudokuProvider = ({ children }) => {
   const [future, setFuture] = useState([]);
 
   const saveToHistory = () => {
-    setHistory((prev) => [
-      ...prev,
-      {
-        sudokuGrid: JSON.parse(JSON.stringify(sudokuGrid)),
-        solutionGrid: JSON.parse(JSON.stringify(solutionGrid)),
-        hintGrid: JSON.parse(JSON.stringify(hintGrid)),
-      },
-    ]);
+    console.log("SAVE TO HISTORY", history);
+
+    // Check if the current state matches the latest state in history
+    const currentState = {
+      sudokuGrid: cloneDeep(sudokuGrid),
+      solutionGrid: cloneDeep(solutionGrid),
+      hintGrid: cloneDeep(hintGrid),
+    };
+
+    const isSameAsLastHistory =
+      history.length > 0 && isEqual(currentState, history[0]); // Compare with the last state in history
+
+    if (isSameAsLastHistory) {
+      console.log(
+        "Current state is the same as the last history state. Not saving."
+      );
+      return; // Do not add to history if the state is the same
+    }
+
+    setHistory((prev) => [currentState, ...prev]);
     setFuture([]); // Clear redo stack on new action
   };
 
   useEffect(() => {
+    console.log("history: ", history.length);
     console.log("history: ", history);
+    console.log("future: ", future.length);
     console.log("future: ", future);
   }, [history, future]);
   const undo = () => {
-    if (history.length === 0) return;
+    console.log("UNDO");
+    if (history.length === 0) {
+      console.warn("No history to undo.");
+      return;
+    }
 
-    const lastState = history[history.length - 1];
-    setHistory((prev) => prev.slice(0, -1)); // Remove last state from history
+    // Save the current state to future
+    const currentState = {
+      sudokuGrid: cloneDeep(sudokuGrid),
+      solutionGrid: cloneDeep(solutionGrid),
+      hintGrid: cloneDeep(hintGrid),
+    };
+    setFuture((prev) => [currentState, ...prev]);
+    // Restore the last state from history
+    const [lastState, ...remainingState] = history;
+    setSudokuGrid(cloneDeep(lastState.sudokuGrid));
+    setSolutionGrid(cloneDeep(lastState.solutionGrid));
+    setHintGrid(cloneDeep(lastState.hintGrid));
 
-    // Push current state to future
-    setFuture((prev) => [
-      {
-        sudokuGrid: JSON.parse(JSON.stringify(sudokuGrid)),
-        solutionGrid: JSON.parse(JSON.stringify(solutionGrid)),
-        hintGrid: JSON.parse(JSON.stringify(hintGrid)),
-      },
-      ...prev,
-    ]);
+    // Remove the last state from history
+    setHistory(remainingState);
 
-    // Restore the last state
-    setSudokuGrid(lastState.sudokuGrid);
-    setSolutionGrid(lastState.solutionGrid);
-    setHintGrid(lastState.hintGrid);
+    console.log(lastState);
+
+    // Validate the restored state
+    console.log("revalidate");
+    setInvalidCells(validateSudokuGrid(lastState.solutionGrid));
+    validateHints(lastState.hintGrid, lastState.solutionGrid, settings);
   };
 
   const redo = () => {
+    console.log("REDO");
     if (future.length === 0) return;
 
-    const nextState = future[0];
-    setFuture((prev) => prev.slice(1)); // Remove first state from future
+    const [nextState, ...remainingState] = future;
+    setFuture(remainingState); // Remove first state from future
 
     // Push current state to history
     setHistory((prev) => [
-      ...prev,
       {
         sudokuGrid: JSON.parse(JSON.stringify(sudokuGrid)),
         solutionGrid: JSON.parse(JSON.stringify(solutionGrid)),
         hintGrid: JSON.parse(JSON.stringify(hintGrid)),
       },
+      ...prev,
     ]);
 
     // Restore the next state
-    setSudokuGrid(nextState.sudokuGrid);
-    setSolutionGrid(nextState.solutionGrid);
-    setHintGrid(nextState.hintGrid);
+    setSudokuGrid(cloneDeep(nextState.sudokuGrid));
+    setSolutionGrid(cloneDeep(nextState.solutionGrid));
+    setHintGrid(cloneDeep(nextState.hintGrid));
   };
+
+  useEffect(() => {
+    console.log("changed Solution:", solutionGrid);
+  }, [solutionGrid]);
 
   // Whenever the game state changes, update localStorage
   useEffect(() => {
@@ -180,7 +208,7 @@ export const SudokuProvider = ({ children }) => {
       const newGrid = [...solutionGrid];
       newGrid[row][col] = value;
 
-      setSolutionGrid(newGrid);
+      setSolutionGrid(cloneDeep(newGrid));
 
       validateSudokuGrid(solutionGrid, row, col, value);
 
@@ -409,17 +437,23 @@ export const SudokuProvider = ({ children }) => {
     // Generate a new Sudoku grid
     const newGrid = GenerateSudoku(gameDifficulty);
 
+    const initialHistoryState = {
+      sudokuGrid: cloneDeep(newGrid),
+      solutionGrid: cloneDeep(newGrid),
+      hintGrid: EmptyHintGrid(),
+    };
+    setHistory([initialHistoryState]); // Save the initial state
+    setFuture([]);
     // Reset states (for a new game)
     setGameId(() => Date.now());
     resetTimer();
     setCurrInputNumber(-1);
 
     // Update grids
-    setSudokuGrid(newGrid);
-    setSolutionGrid(newGrid.map((row) => row.slice())); // Create a deep copy for the solution grid
+    setSudokuGrid(cloneDeep(newGrid));
+    setSolutionGrid(cloneDeep(newGrid)); // Create a deep copy for the solution grid
     setHintGrid(EmptyHintGrid());
 
-    // Add new game to history
     const newGameState = {
       gameId: Date.now(),
       gameDifficulty,

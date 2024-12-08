@@ -32,13 +32,6 @@ export const TimerProvider = ({ children }) => {
   const toggleTimer = () => setTimerActive((prev) => !prev);
   const updateTimer = (time) => setElapsedTime(time);
 
-  useEffect(() => {
-    // Save the elapsed time to localStorage whenever it changes
-    const savedState = JSON.parse(localStorage.getItem("sudokuState")) || {};
-    const gameState = { ...savedState, elapsedTime };
-    localStorage.setItem("sudokuState", JSON.stringify(gameState));
-  }, [elapsedTime]);
-
   return (
     <TimerContext.Provider
       value={{
