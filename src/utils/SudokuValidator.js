@@ -85,3 +85,43 @@ export const validateSudokuGrid = (SudokuGrid) => {
 
   return newInvalidCellsSet;
 };
+
+// Function to validate hints and apply error handling
+export const validateHints = (newHintGrid, solutionGrid, settings) => {
+  console.log("validateHints");
+
+  for (let row = 0; row < 9; row++) {
+    for (let col = 0; col < 9; col++) {
+      const cellElement = document.querySelector(
+        `[data-row="${row}"][data-col="${col}"]`
+      );
+
+      if (cellElement?.children[1]) {
+        // Check if there are hints for this cell
+        for (let num = 1; num <= 9; num++) {
+          const hintIsValid = validateNewCellValue(solutionGrid, row, col, num);
+          const hintCell = cellElement.children[1].querySelector(
+            `[data-hint="${num}"]`
+          );
+
+          if (hintCell) {
+            if (!hintIsValid) {
+              //console.log(hintCell);
+              // Invalid hint, handle based on settings
+              if (settings.highlightNoteErrors) {
+                // Mark invalid hints as red
+                hintCell.classList.add("red");
+              }
+              if (settings.autoRemoveInvalidNotes)
+                hintCell.classList.remove("shown");
+            } else {
+              // Valid hint, ensure it's shown
+              hintCell.classList.remove("red");
+            }
+          }
+        }
+      }
+    }
+  }
+  return newHintGrid;
+};

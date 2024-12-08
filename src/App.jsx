@@ -9,6 +9,7 @@ import { SudokuProvider } from "./contexts/SudokuProvider";
 import { ScreenProvider } from "./contexts/ScreenContext";
 import AppContent from "./AppContent";
 import { SettingsProvider } from "./contexts/SettingsContext";
+import { GameHistoryProvider } from "./contexts/GameHistoryProvider";
 
 function App() {
   return (
@@ -16,9 +17,11 @@ function App() {
       <TimerProvider>
         <ScreenProvider>
           <GameDifficultyProvider>
-            <SudokuProvider>
-              <AppContent />
-            </SudokuProvider>
+            <GameHistoryProvider>
+              <SudokuProvider>
+                <AppContent />
+              </SudokuProvider>
+            </GameHistoryProvider>
           </GameDifficultyProvider>
         </ScreenProvider>
       </TimerProvider>

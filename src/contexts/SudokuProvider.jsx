@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import {
   validateSudokuGrid,
   checkSolution,
-  validateNewCellValue,
+  validateHints,
 } from "../utils/SudokuValidator";
 import { EmptyGrid, EmptyHintGrid } from "../constants/sudokuConstants";
 import { createContext, useContext } from "react";
@@ -13,6 +13,12 @@ import { useScreenContext } from "./ScreenContext";
 import { useSettingsContext } from "./SettingsContext";
 import GenerateSudoku from "../utils/GenerateSudoku";
 import { isEqual } from "lodash";
+import { useGameHistoryContext } from "./GameHistoryProvider";
+import {
+  highlightSameDigit,
+  markActiveCell,
+  markInvalidCells,
+} from "../utils/SudokuGridUtils";
 
 const SudokuContext = createContext(0);
 export const SudokuProvider = ({ children }) => {
@@ -22,7 +28,8 @@ export const SudokuProvider = ({ children }) => {
     useTimerContext();
   const { settings, initialSettings, setSettings, setInitialSettings } =
     useSettingsContext();
-
+  const { gameHistory, saveGameToHistory, getGameFromHistory } =
+    useGameHistoryContext();
   const [gameId, setGameId] = useState(() => Date.now());
   const [sudokuGrid, setSudokuGrid] = useState(() => EmptyGrid());
   const [solutionGrid, setSolutionGrid] = useState(() => EmptyGrid());
@@ -33,7 +40,6 @@ export const SudokuProvider = ({ children }) => {
   const [inputMode, setInputMode] = useState("noInput"); // Modes: "noInput", "numberFirst", "cellFirst"
   const [highlightNumber, setHighlightNumber] = useState(-1);
 
-  const [gameHistory, setGameHistory] = useState(() => []); // Array to store game history with IDs
   // Whenever the game state changes, update localStorage
   useEffect(() => {
     if (isEqual(sudokuGrid, EmptyGrid())) return; // if sudoku grid is being reset, don't save state
@@ -49,28 +55,8 @@ export const SudokuProvider = ({ children }) => {
       initialSettings,
     };
     console.log("Saving game state to localStorage:", gameState); // Debug log
-    setGameHistory((prevHistory) => {
-      const existingGameIndex = prevHistory.findIndex(
-        (game) => game.id === gameState.id
-      );
-      if (existingGameIndex !== -1) {
-        // Update existing game in history if ID matches, without resetting the elapsed time
-        const updatedGame = {
-          ...prevHistory[existingGameIndex],
-          ...gameState,
-        };
-        const newHistory = [...prevHistory];
-        newHistory[existingGameIndex] = updatedGame;
-        return newHistory;
-      } else {
-        // Add new game to history
-        return [...prevHistory, gameState].slice(-10); // Limit history to 10 games
-      }
-    });
-    localStorage.setItem(
-      "sudokuHistory",
-      JSON.stringify(gameHistory) // Save the entire game history
-    );
+
+    saveGameToHistory(gameState);
   }, [
     sudokuGrid,
     solutionGrid,
@@ -117,9 +103,14 @@ export const SudokuProvider = ({ children }) => {
       setHintGrid(newHintGrid);
 
       // After updating the hints, validate each hint value and handle errors
-      const validatedHintsGrid = validateHints(newHintGrid);
+      const validatedHintsGrid = validateHints(
+        newHintGrid,
+        solutionGrid,
+        settings
+      );
       setHintGrid(validatedHintsGrid);
     } else {
+      // not in pencil mode, update solution grid
       const newGrid = [...solutionGrid];
       newGrid[row][col] = value;
 
@@ -134,53 +125,8 @@ export const SudokuProvider = ({ children }) => {
 
       setInvalidCells(validateSudokuGrid(newGrid)); // Revalidate after update
 
-      validateHints(hintGrid);
+      validateHints(hintGrid, solutionGrid, settings);
     }
-  };
-
-  // Function to validate hints and apply error handling
-  const validateHints = (newHintGrid) => {
-    console.log("validateHints");
-
-    for (let row = 0; row < 9; row++) {
-      for (let col = 0; col < 9; col++) {
-        const cellElement = document.querySelector(
-          `[data-row="${row}"][data-col="${col}"]`
-        );
-
-        if (cellElement?.children[1]) {
-          // Check if there are hints for this cell
-          for (let num = 1; num <= 9; num++) {
-            const hintIsValid = validateNewCellValue(
-              solutionGrid,
-              row,
-              col,
-              num
-            );
-            const hintCell = cellElement.children[1].querySelector(
-              `[data-hint="${num}"]`
-            );
-
-            if (hintCell) {
-              if (!hintIsValid) {
-                //console.log(hintCell);
-                // Invalid hint, handle based on settings
-                if (settings.highlightNoteErrors) {
-                  // Mark invalid hints as red
-                  hintCell.classList.add("red");
-                }
-                if (settings.autoRemoveInvalidNotes)
-                  hintCell.classList.remove("shown");
-              } else {
-                // Valid hint, ensure it's shown
-                hintCell.classList.remove("red");
-              }
-            }
-          }
-        }
-      }
-    }
-    return newHintGrid;
   };
 
   const handleNumberClick = (num) => {
@@ -230,7 +176,14 @@ export const SudokuProvider = ({ children }) => {
             sudokuGrid[row][col]
           );
           setHighlightNumber(sudokuGrid[row][col]);
-          highlightSameDigit();
+          highlightSameDigit(
+            inputMode,
+            activeCell,
+            solutionGrid,
+            currInputNumber,
+            highlightNumber,
+            settings
+          );
         }
       } else if (inputMode === "numberFirst") {
         // Number-first input mode
@@ -252,7 +205,14 @@ export const SudokuProvider = ({ children }) => {
               );
               resetInputMode();
               setHighlightNumber(sudokuGrid[row][col]);
-              highlightSameDigit();
+              highlightSameDigit(
+                inputMode,
+                activeCell,
+                solutionGrid,
+                currInputNumber,
+                highlightNumber,
+                settings
+              );
             }
           }
         } else {
@@ -284,7 +244,14 @@ export const SudokuProvider = ({ children }) => {
               );
               resetInputMode();
               setHighlightNumber(solutionGrid[row][col]);
-              highlightSameDigit();
+              highlightSameDigit(
+                inputMode,
+                activeCell,
+                solutionGrid,
+                currInputNumber,
+                highlightNumber,
+                settings
+              );
             }
           }
         } else {
@@ -350,155 +317,29 @@ export const SudokuProvider = ({ children }) => {
   useEffect(() => {
     if (currentScreen != "game") resetInputMode();
     else {
-      markInvalidCells();
-      validateHints(hintGrid);
+      markInvalidCells(invalidCells, settings);
+      validateHints(hintGrid, solutionGrid, settings);
     }
   }, [currentScreen]);
 
   useEffect(() => {
-    markActiveCell();
+    markActiveCell(activeCell, settings);
   }, [activeCell]);
 
-  // useEffect(() => {
-  //   console.log("inputMode:" + inputMode);
-  // }, [inputMode]);
-
-  const markActiveCell = () => {
-    // Clear previous highlights
-    for (let i = 0; i < 9; i++) {
-      for (let j = 0; j < 9; j++) {
-        const cellElement = document.querySelector(
-          `[data-row="${i}"][data-col="${j}"]`
-        );
-        if (cellElement) {
-          cellElement.classList.remove(
-            "active-cell",
-            "neighbor-cell",
-            "same-number-cell"
-          );
-        }
-      }
-    }
-    // Highlight the active cell and its neighbors
-    if (activeCell) {
-      const { row, col } = activeCell;
-
-      // Highlight the active cell
-      const activeCellElement = document.querySelector(
-        `[data-row="${row}"][data-col="${col}"]`
-      );
-      if (activeCellElement) {
-        activeCellElement.classList.add("active-cell");
-      }
-
-      // Highlight neighboring cells in the same row and column
-      if (settings.highlightRowCol) {
-        for (let i = 0; i < 9; i++) {
-          // Row neighbors
-          if (i !== col) {
-            const rowNeighbor = document.querySelector(
-              `[data-row="${row}"][data-col="${i}"]`
-            );
-            if (rowNeighbor) {
-              rowNeighbor.classList.add("neighbor-cell");
-            }
-          }
-
-          // Column neighbors
-          if (i !== row) {
-            const colNeighbor = document.querySelector(
-              `[data-row="${i}"][data-col="${col}"]`
-            );
-            if (colNeighbor) {
-              colNeighbor.classList.add("neighbor-cell");
-            }
-          }
-        }
-      }
-    }
-  };
-
   useEffect(() => {
-    highlightSameDigit();
+    highlightSameDigit(
+      inputMode,
+      activeCell,
+      solutionGrid,
+      currInputNumber,
+      highlightNumber,
+      settings
+    );
   }, [activeCell, currInputNumber, highlightNumber, solutionGrid]);
-
-  // Highlight cells with the same number
-  const highlightSameDigit = () => {
-    // clear all highlights
-    for (let i = 0; i < 9; i++) {
-      for (let j = 0; j < 9; j++) {
-        const cellElement = document.querySelector(
-          `[data-row="${i}"][data-col="${j}"]`
-        );
-        if (cellElement) {
-          cellElement.classList.remove("same-number-cell");
-        }
-      }
-    }
-
-    if (!settings.highlightSameDigits) return; // Exit if the feature is disabled
-
-    let activeNumber = -1;
-
-    if (inputMode == "cellFirst") {
-      if (activeCell) {
-        const { row, col } = activeCell;
-        activeNumber = solutionGrid[row][col];
-      }
-    } else if (inputMode == "numberFirst") {
-      activeNumber = currInputNumber;
-    } else if (inputMode == "noInput") {
-      activeNumber = highlightNumber;
-    } else {
-      activeNumber = -1;
-    }
-
-    if (activeNumber <= 0) return;
-    // Iterate through all cells to update the highlight state
-    for (let i = 0; i < 9; i++) {
-      for (let j = 0; j < 9; j++) {
-        const cellElement = document.querySelector(
-          `[data-row="${i}"][data-col="${j}"]`
-        );
-
-        if (cellElement) {
-          if (solutionGrid[i][j] == activeNumber) {
-            cellElement.classList.add("same-number-cell");
-          } else {
-            cellElement.classList.remove("same-number-cell");
-          }
-        }
-      }
-    }
-  };
-
-  const markInvalidCells = () => {
-    if (settings.highlightErrors) {
-      // Apply visual updates
-      for (let i = 0; i < 9; i++) {
-        for (let j = 0; j < 9; j++) {
-          const cellKey = `${i}-${j}`;
-          // console.log("Checking cellKey:" + cellKey);
-
-          const cellElement = document.querySelector(
-            `[data-row="${i}"][data-col="${j}"]`
-          );
-
-          if (cellElement) {
-            if (invalidCells.has(cellKey)) {
-              cellElement.classList.add("red");
-            } else {
-              cellElement.classList.remove("red");
-            }
-          }
-        }
-      }
-    }
-  };
 
   // Start a new game
   const startNewGame = () => {
-    console.log("Start New Game...");
+    console.debug("Start New Game...");
     // Generate a new Sudoku grid
     const newGrid = GenerateSudoku(gameDifficulty);
 
@@ -523,44 +364,16 @@ export const SudokuProvider = ({ children }) => {
       settings,
       initialSettings,
     };
-    loadGameHistory();
-    setGameHistory((prevHistory) => {
-      if (prevHistory.some((game) => game.id === newGameState.id)) {
-        // Update existing game in history if ID matches
-        return prevHistory.map((game) =>
-          game.id === newGameState.id ? newGameState : game
-        );
-      } else {
-        // Add new game to history
-        return [...prevHistory, newGameState].slice(-10); // Limit history to 10 games
-      }
-    });
+    saveGameToHistory(newGameState);
 
-    // Clear saved state and switch to the game screen
-    localStorage.removeItem("sudokuHistory");
     switchScreen("game");
   };
-  // Load game history from localStorage
-  const loadGameHistory = () => {
-    const savedHistory =
-      JSON.parse(localStorage.getItem("sudokuHistory")) || [];
-    setGameHistory(savedHistory);
-  };
-
-  useEffect(() => {
-    // Load game history on initialization
-    loadGameHistory();
-  }, []);
 
   const loadHistoricalGame = (oldGameId) => {
-    console.log("Load Old Game...");
-
-    // Find the game with oldGameId from gameHistory
-    const oldGame = gameHistory.find((game) => game.id === oldGameId);
+    console.debug("Load Old Game...");
+    const oldGame = getGameFromHistory(oldGameId);
 
     if (oldGame) {
-      // Update states
-      console.log(oldGame);
       setGameId(oldGame.id);
       setCurrInputNumber(-1); // Reset input number
       setSudokuGrid(oldGame.sudokuGrid);
@@ -571,7 +384,6 @@ export const SudokuProvider = ({ children }) => {
       setSettings(oldGame.settings);
       setInitialSettings(oldGame.initialSettings);
 
-      // Switch to the game screen (if needed)
       switchScreen("game");
     } else {
       console.error("Game not found!");
