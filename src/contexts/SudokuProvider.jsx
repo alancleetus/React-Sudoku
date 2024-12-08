@@ -12,14 +12,18 @@ import { useGameDifficultyContext } from "./GameDifficultyProvider";
 import { useScreenContext } from "./ScreenContext";
 import { useSettingsContext } from "./SettingsContext";
 import GenerateSudoku from "../utils/GenerateSudoku";
+import { isEqual } from "lodash";
 
 const SudokuContext = createContext(0);
 export const SudokuProvider = ({ children }) => {
   const { switchScreen, currentScreen } = useScreenContext();
   const { gameDifficulty, updateGameDifficulty } = useGameDifficultyContext();
-  const { resetTimer, pauseTimer, updateTimer } = useTimerContext();
+  const { resetTimer, pauseTimer, updateTimer, elapsedTime } =
+    useTimerContext();
   const { settings, initialSettings, setSettings, setInitialSettings } =
     useSettingsContext();
+
+  const [gameId, setGameId] = useState(() => Date.now());
   const [sudokuGrid, setSudokuGrid] = useState(() => EmptyGrid());
   const [solutionGrid, setSolutionGrid] = useState(() => EmptyGrid());
   const [hintGrid, setHintGrid] = useState(() => EmptyHintGrid());
@@ -29,20 +33,44 @@ export const SudokuProvider = ({ children }) => {
   const [inputMode, setInputMode] = useState("noInput"); // Modes: "noInput", "numberFirst", "cellFirst"
   const [highlightNumber, setHighlightNumber] = useState(-1);
 
-  // Whenever the game state changes, update localStorage (example)
+  const [gameHistory, setGameHistory] = useState(() => []); // Array to store game history with IDs
+  // Whenever the game state changes, update localStorage
   useEffect(() => {
-    const gameState = {
-      gameDifficulty: gameDifficulty,
-      elapsedTime: 0, // Assuming you will update this via your TimerContext
-      sudokuGrid: sudokuGrid,
-      solutionGrid: solutionGrid,
-      hintGrid: hintGrid,
-      settings: settings,
-      initialSettings: initialSettings,
-    };
+    if (isEqual(sudokuGrid, EmptyGrid())) return; // if sudoku grid is being reset, don't save state
 
-    // console.log("Saving game state to localStorage:", gameState); // Debug log
-    localStorage.setItem("sudokuState", JSON.stringify(gameState));
+    const gameState = {
+      gameId, // Unique ID for the game state
+      gameDifficulty,
+      elapsedTime,
+      sudokuGrid,
+      solutionGrid,
+      hintGrid: hintGrid.map((row) => row.map((cell) => ({ ...cell }))), // Deep clone the hint grid
+      settings,
+      initialSettings,
+    };
+    console.log("Saving game state to localStorage:", gameState); // Debug log
+    setGameHistory((prevHistory) => {
+      const existingGameIndex = prevHistory.findIndex(
+        (game) => game.id === gameState.id
+      );
+      if (existingGameIndex !== -1) {
+        // Update existing game in history if ID matches, without resetting the elapsed time
+        const updatedGame = {
+          ...prevHistory[existingGameIndex],
+          ...gameState,
+        };
+        const newHistory = [...prevHistory];
+        newHistory[existingGameIndex] = updatedGame;
+        return newHistory;
+      } else {
+        // Add new game to history
+        return [...prevHistory, gameState].slice(-10); // Limit history to 10 games
+      }
+    });
+    localStorage.setItem(
+      "sudokuHistory",
+      JSON.stringify(gameHistory) // Save the entire game history
+    );
   }, [
     sudokuGrid,
     solutionGrid,
@@ -50,7 +78,7 @@ export const SudokuProvider = ({ children }) => {
     gameDifficulty,
     settings,
     initialSettings,
-  ]); // This will trigger on any of these state changes
+  ]);
 
   const updateCell = (row, col, value) => {
     if (row < 0 || row >= 9 || col < 0 || col >= 9) {
@@ -470,10 +498,12 @@ export const SudokuProvider = ({ children }) => {
 
   // Start a new game
   const startNewGame = () => {
+    console.log("Start New Game...");
     // Generate a new Sudoku grid
     const newGrid = GenerateSudoku(gameDifficulty);
 
     // Reset states (for a new game)
+    setGameId(() => Date.now());
     resetTimer();
     setCurrInputNumber(-1);
 
@@ -481,28 +511,86 @@ export const SudokuProvider = ({ children }) => {
     setSudokuGrid(newGrid);
     setSolutionGrid(newGrid.map((row) => row.slice())); // Create a deep copy for the solution grid
     setHintGrid(EmptyHintGrid());
+
+    // Add new game to history
+    const newGameState = {
+      gameId: Date.now(),
+      gameDifficulty,
+      elapsedTime: 0,
+      sudokuGrid: newGrid,
+      solutionGrid: newGrid,
+      hintGrid: EmptyHintGrid(),
+      settings,
+      initialSettings,
+    };
+    loadGameHistory();
+    setGameHistory((prevHistory) => {
+      if (prevHistory.some((game) => game.id === newGameState.id)) {
+        // Update existing game in history if ID matches
+        return prevHistory.map((game) =>
+          game.id === newGameState.id ? newGameState : game
+        );
+      } else {
+        // Add new game to history
+        return [...prevHistory, newGameState].slice(-10); // Limit history to 10 games
+      }
+    });
+
     // Clear saved state and switch to the game screen
-    localStorage.removeItem("sudokuState");
+    localStorage.removeItem("sudokuHistory");
     switchScreen("game");
   };
+  // Load game history from localStorage
+  const loadGameHistory = () => {
+    const savedHistory =
+      JSON.parse(localStorage.getItem("sudokuHistory")) || [];
+    setGameHistory(savedHistory);
+  };
 
-  const loadGameState = () => {
-    const savedState = JSON.parse(localStorage.getItem("sudokuState"));
-    if (savedState) {
-      updateGameDifficulty(savedState.gameDifficulty);
-      updateTimer(savedState.elapsedTime);
-      setSudokuGrid(savedState.sudokuGrid);
-      setSolutionGrid(savedState.solutionGrid);
-      setHintGrid(savedState.hintGrid);
-      setSettings(savedState.settings);
-      setInitialSettings(savedState.initialSettings);
+  useEffect(() => {
+    // Load game history on initialization
+    loadGameHistory();
+  }, []);
+
+  const loadHistoricalGame = (oldGameId) => {
+    console.log("Load Old Game...");
+
+    // Find the game with oldGameId from gameHistory
+    const oldGame = gameHistory.find((game) => game.id === oldGameId);
+
+    if (oldGame) {
+      // Update states
+      console.log(oldGame);
+      setGameId(oldGame.id);
+      setCurrInputNumber(-1); // Reset input number
+      setSudokuGrid(oldGame.sudokuGrid);
+      setSolutionGrid(oldGame.solutionGrid); // Create a deep copy for the solution grid
+      setHintGrid(oldGame.hintGrid);
+      updateTimer(oldGame.elapsedTime);
+      updateGameDifficulty(oldGame.gameDifficulty);
+      setSettings(oldGame.settings);
+      setInitialSettings(oldGame.initialSettings);
+
+      // Switch to the game screen (if needed)
+      switchScreen("game");
+    } else {
+      console.error("Game not found!");
     }
   };
 
-  // Resume the game if a saved state exists
+  // Resume the game with the highest ID (last played)
   const resumeGame = () => {
-    loadGameState();
-    switchScreen("game");
+    if (gameHistory.length > 0) {
+      const latestGame = gameHistory[gameHistory.length - 1]; // Latest game based on ID
+      updateGameDifficulty(latestGame.gameDifficulty);
+      updateTimer(latestGame.elapsedTime);
+      setSudokuGrid(latestGame.sudokuGrid);
+      setSolutionGrid(latestGame.solutionGrid);
+      setHintGrid(latestGame.hintGrid);
+      setSettings(latestGame.settings);
+      setInitialSettings(latestGame.initialSettings);
+      switchScreen("game");
+    }
   };
 
   const getNumCount = (num) => {
@@ -538,12 +626,15 @@ export const SudokuProvider = ({ children }) => {
         getNumCount,
         hintGrid,
         setHintGrid,
+        gameHistory,
+        loadHistoricalGame,
       }}
     >
       {children}
     </SudokuContext.Provider>
   );
 };
+
 SudokuProvider.propTypes = {
   children: PropTypes.node.isRequired, // Validate children
 };

@@ -30,6 +30,7 @@ export const ScreenProvider = ({ children }) => {
   const handleHomeClick = () => switchScreen("home");
   const handleGameClick = () => switchScreen("game");
   const handleSettingsClick = () => switchScreen("settings");
+  const handleHistoryClick = () => switchScreen("history");
 
   // Avoid any state update directly during render
   useEffect(() => {}, [currentScreen]);
@@ -41,6 +42,7 @@ export const ScreenProvider = ({ children }) => {
         previousScreen,
         switchScreen,
         handleSettingsClick,
+        handleHistoryClick,
         handleBackButton,
         handleHomeClick,
         handleGameClick,

@@ -1,15 +1,33 @@
+import { useEffect, useState } from "react";
 import DifficultySelector from "../components/DifficultyComponent";
-import { EmptyGrid } from "../constants/sudokuConstants";
+
 import { useScreenContext } from "../contexts/ScreenContext";
 import { useSudokuContext } from "../contexts/SudokuProvider";
-import isEqual from "lodash/isEqual";
 
 function HomeScreen() {
-  const { handleSettingsClick } = useScreenContext();
-  const { startNewGame, resumeGame } = useSudokuContext();
-  const prevState = JSON.parse(localStorage.getItem("sudokuState"));
-  const resumeDiff = prevState ? prevState.gameDifficulty : "";
-  const resumeTime = prevState ? prevState.elapsedTime : "";
+  const { handleSettingsClick, handleHistoryClick } = useScreenContext();
+  const { startNewGame, resumeGame, sudokuGrid, gameHistory } =
+    useSudokuContext();
+  const [hasSavedGame, setHasSavedGame] = useState(false);
+  const [resumeDiff, setResumeDiff] = useState("");
+  const [resumeTime, setResumeTime] = useState("");
+
+  // Check if there's a saved game in localStorage
+  const checkSavedGame = () => {
+    //console.log("Previous Game State:", prevState); // Debug log
+    if (gameHistory.length > 0) {
+      const latestGame = gameHistory[gameHistory.length - 1]; // Latest game based on ID
+
+      setResumeDiff(latestGame.gameDifficulty);
+      setResumeTime(latestGame.elapsedTime);
+      return true;
+    } else return false;
+  };
+
+  // Recalculate `hasSavedGame` whenever the component renders
+  useEffect(() => {
+    setHasSavedGame(checkSavedGame());
+  }, [sudokuGrid]);
 
   // Format elapsed time into mm:ss
   const formatTime = (timeInSeconds) => {
@@ -30,24 +48,21 @@ function HomeScreen() {
           New Game
         </button>
       </div>
-      {prevState && (
+      {hasSavedGame && (
         <div>
-          {!isEqual(prevState.sudokuGrid, EmptyGrid()) && (
-            <button
-              className="home-screen-buttons"
-              onClick={() => resumeGame()}
-            >
-              <span>Resume Game</span>
-              <br />
-              <span>
-                {resumeDiff !== ""
-                  ? `${resumeDiff} - ${formatTime(resumeTime)}`
-                  : ""}
-              </span>
-            </button>
-          )}
+          <button className="home-screen-buttons" onClick={() => resumeGame()}>
+            <span>Resume Game</span>
+            <br />
+            <span className="button-subtext">
+              {resumeDiff} - {formatTime(resumeTime)}
+            </span>
+          </button>
         </div>
       )}
+
+      <button className="home-screen-buttons" onClick={handleHistoryClick}>
+        Incomplete Games
+      </button>
       <button className="home-screen-buttons" onClick={handleSettingsClick}>
         Settings
       </button>
