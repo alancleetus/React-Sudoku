@@ -1,3 +1,5 @@
+import { formatTime } from "../utils/TimerUtils";
+
 function StatsScreen() {
   const getStatistics = () => {
     const completedGames =
@@ -47,16 +49,13 @@ function StatsScreen() {
       <div className="stats-section" id="difficulty-average-time-section">
         <h2>Average Time by Difficulty</h2>
         <div className="stats-item">
-          <strong>Easy:</strong> {averageTime.easy.toFixed(2)} seconds
+          <strong>Easy:</strong> {formatTime(averageTime?.easy?.toFixed(2))}
         </div>
         <div className="stats-item">
-          <strong>Medium:</strong> {averageTime.medium.toFixed(2)} seconds
+          <strong>Medium:</strong> {formatTime(averageTime?.medium?.toFixed(2))}
         </div>
         <div className="stats-item">
-          <strong>Hard:</strong> {averageTime.hard.toFixed(2)} seconds
-        </div>
-        <div className="stats-item">
-          <strong>Expert:</strong> {averageTime.expert.toFixed(2)} seconds
+          <strong>Hard:</strong> {formatTime(averageTime?.hard?.toFixed(2))}
         </div>
       </div>
     </div>
