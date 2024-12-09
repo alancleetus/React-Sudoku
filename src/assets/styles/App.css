@@ -75,7 +75,8 @@ svg {
   width: 100%;
   padding: var(--font-size-medium); /* Responsive padding */
   font-size: var(--font-size-medium); /* Responsive font size */
-  background-color: white;
+  color: var(--home-screen-button-color);
+  background-color: var(--home-screen-button-bg-color);
   margin-top: 10px;
   border: none;
   border-radius: 10px;
@@ -107,4 +108,14 @@ input[type="checkbox"] {
 input[type="checkbox"]:checked {
   background-color: var(--primary-color); /* Fallback for older browsers */
   border-color: var(--primary-color);
+}
+
+.stats-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.stats-section {
+  width: 500px;
 }

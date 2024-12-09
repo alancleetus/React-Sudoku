@@ -6,7 +6,7 @@
   background-color: var(--editable-cell-bg);
   color: var(--text-color);
   height: clamp(40px, 3vw, 50px); /* Responsive height */
-  padding: 15px 15px;
+  padding: clamp(5px, 0.5em, 15px);
   transition: all 0.3s ease;
 }
 

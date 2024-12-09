@@ -9,6 +9,9 @@
   --locked-cell-text-color: var(--text-color);
   --gray-color: hsl(216, 20%, 90%);
 
+  --home-screen-button-bg-color: white;
+  --home-screen-button-color: black;
+
   --highlight-cell: hsl(216, 10%, 85%);
   --highlight-row: hsl(222, 15%, 50%);
   --primary-color: hsl(
@@ -33,6 +36,9 @@
   --editable-cell-text-color: hsl(0, 0%, 100%);
   --locked-cell-text-color: hsl(0, 0%, 100%);
   --gray-color: hsl(218, 30%, 35%);
+
+  --home-screen-button-bg-color: black;
+  --home-screen-button-color: white;
 
   --highlight-cell: hsl(216, 10%, 85%);
   --highlight-row: hsl(222, 15%, 50%);

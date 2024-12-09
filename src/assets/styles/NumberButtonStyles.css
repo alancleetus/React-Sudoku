@@ -9,7 +9,8 @@
   flex-wrap: wrap;
   gap: 10px;
   row-gap: 10px;
-  max-width: calc(5 * 3em);
+  margin-top: 10px;
+  max-width: calc(6 * 3em);
   justify-content: center;
   font-size: var(--font-size-base); /* Maintain consistent font size */
 }
@@ -32,9 +33,12 @@
 button.num-button {
   border-radius: 8px;
   border: 1px solid transparent;
-
+  /* 
   width: 2em;
-  height: 2em;
+  height: 2em; */
+
+  width: clamp(2em, 5vw, 3em);
+  height: clamp(2em, 5vw, 3em);
 
   /* padding: clamp(0.4em, 2vw, 0.8em) clamp(0.8em, 3vw, 1.5em); Responsive padding */
   font-size: var(--font-size-base); /* Maintain consistent font size */
