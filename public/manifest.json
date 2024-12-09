@@ -1,0 +1,16 @@
+{
+  "short_name": "SudokuApp",
+  "name": "Sudoku App",
+  "icons": [
+    {
+      "src": "./src/assets/icons/sudoku-icon.png",
+      "type": "image/png",
+      "sizes": "500x500"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#000000"
+}
