@@ -33,6 +33,7 @@ export const ScreenProvider = ({ children }) => {
   const handleGameClick = () => switchScreen("game");
   const handleSettingsClick = () => switchScreen("settings");
   const handleHistoryClick = () => switchScreen("history");
+  const handleStatsClick = () => switchScreen("stats");
 
   // Timer management based on the screen
   useEffect(() => {
@@ -54,6 +55,7 @@ export const ScreenProvider = ({ children }) => {
         handleBackButton,
         handleHomeClick,
         handleGameClick,
+        handleStatsClick,
       }}
     >
       {children}

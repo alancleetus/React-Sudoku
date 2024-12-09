@@ -28,8 +28,12 @@ export const SudokuProvider = ({ children }) => {
     useTimerContext();
   const { settings, initialSettings, setSettings, setInitialSettings } =
     useSettingsContext();
-  const { gameHistory, saveGameToHistory, getGameFromHistory } =
-    useGameHistoryContext();
+  const {
+    gameHistory,
+    saveGameToHistory,
+    getGameFromHistory,
+    deleteGameFromHistory,
+  } = useGameHistoryContext();
   const [gameId, setGameId] = useState(() => Date.now());
 
   const [sudokuGrid, setSudokuGrid] = useState(() => EmptyGrid());
@@ -214,6 +218,7 @@ export const SudokuProvider = ({ children }) => {
 
       if (checkSolution(solutionGrid)) {
         alert("Completed!");
+        deleteGameFromHistory(gameId);
         pauseTimer();
       }
 

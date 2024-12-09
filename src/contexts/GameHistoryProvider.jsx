@@ -53,11 +53,47 @@ export const GameHistoryProvider = ({ children }) => {
     return gameHistory.find((game) => game.gameId === gameId);
   };
 
+  const saveCompletedGame = (gameId, gameDifficulty, elapsedTime) => {
+    const completedGame = {
+      gameId,
+      difficulty: gameDifficulty,
+      elapsedTime,
+      completionDate: new Date().toISOString(), // Record the current date
+    };
+
+    // Retrieve the existing completed games from localStorage
+    const existingCompletedGames =
+      JSON.parse(localStorage.getItem("completedGames")) || [];
+
+    // Add the new completed game to the array
+    const updatedCompletedGames = [...existingCompletedGames, completedGame];
+
+    // Save the updated array back to localStorage
+    localStorage.setItem(
+      "completedGames",
+      JSON.stringify(updatedCompletedGames)
+    );
+
+    console.log("Game saved to completed games:", completedGame);
+  };
+
   // Delete a specific game by ID
   const deleteGameFromHistory = (gameId) => {
-    setGameHistory((prevHistory) =>
-      prevHistory.filter((game) => game.gameId !== gameId)
-    );
+    // Your logic for deleting a game
+    console.debug("Deleting game:", gameId);
+
+    const game = gameHistory.find((g) => g.gameId === gameId);
+    if (!game) {
+      console.error("Game not found!");
+      return;
+    }
+
+    // Save completed game to statistics before deleting
+    saveCompletedGame(gameId, game.gameDifficulty, game.elapsedTime);
+
+    // Remove game from history
+    const updatedHistory = gameHistory.filter((g) => g.gameId !== gameId);
+    setGameHistory(updatedHistory);
   };
 
   return (

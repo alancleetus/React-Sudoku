@@ -6,6 +6,7 @@ import SettingsScreen from "./screens/SettingsScreen";
 import DifficultySelector from "./components/DifficultyComponent";
 import { BsArrowLeftShort } from "react-icons/bs";
 import { IoSettingsOutline } from "react-icons/io5";
+import StatsScreen from "./screens/StatsScreen";
 
 function AppContent() {
   const { currentScreen, handleBackButton, handleSettingsClick } =
@@ -39,6 +40,7 @@ function AppContent() {
           {currentScreen === "settings" && <SettingsScreen />}
           {currentScreen === "difficulty" && <DifficultySelector />}
           {currentScreen === "history" && <HistoryScreen />}
+          {currentScreen === "stats" && <StatsScreen />}
         </div>
       </div>
     </div>

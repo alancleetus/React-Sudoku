@@ -6,8 +6,12 @@ import { useSudokuContext } from "../contexts/SudokuProvider";
 import { useGameHistoryContext } from "../contexts/GameHistoryProvider";
 
 function HomeScreen() {
-  const { handleSettingsClick, handleHistoryClick, currentScreen } =
-    useScreenContext();
+  const {
+    handleSettingsClick,
+    handleHistoryClick,
+    currentScreen,
+    handleStatsClick,
+  } = useScreenContext();
   const { gameHistory } = useGameHistoryContext();
 
   const { startNewGame, resumeGame, sudokuGrid } = useSudokuContext();
@@ -73,6 +77,9 @@ function HomeScreen() {
       )}
       <button className="home-screen-buttons" onClick={handleSettingsClick}>
         Settings
+      </button>
+      <button className="home-screen-buttons" onClick={handleStatsClick}>
+        Stats
       </button>
     </>
   );
