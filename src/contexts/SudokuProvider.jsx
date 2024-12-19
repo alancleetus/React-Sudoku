@@ -80,6 +80,7 @@ export const SudokuProvider = ({ children }) => {
     console.log("future: ", future.length);
     console.log("future: ", future);
   }, [history, future]);
+
   const undo = () => {
     console.log("UNDO");
     if (history.length === 0) {
@@ -140,6 +141,11 @@ export const SudokuProvider = ({ children }) => {
 
   // Whenever the game state changes, update localStorage
   useEffect(() => {
+    if (checkSolution(solutionGrid)) {
+      console.log("Game completed. Preventing save.");
+      return;
+    } //if game completed, dont re-save game
+
     if (isEqual(sudokuGrid, EmptyGrid())) return; // if sudoku grid is being reset, don't save state
 
     const gameState = {

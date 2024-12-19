@@ -10,25 +10,18 @@ export const GameHistoryProvider = ({ children }) => {
     JSON.parse(localStorage.getItem("sudokuHistory")) || []
   );
 
-  // Load history from localStorage on mount
-  useEffect(() => {
-    const storedHistory =
-      JSON.parse(localStorage.getItem("sudokuHistory")) || [];
-    setGameHistory(storedHistory);
-  }, []);
-
   // Save history to localStorage whenever it changes
   useEffect(() => {
-    //console.log("....saving hist....", gameHistory);
+    console.log("....saving hist....", gameHistory);
     localStorage.setItem("sudokuHistory", JSON.stringify(gameHistory));
   }, [gameHistory]);
 
   // Add or update a game in the history
   const saveGameToHistory = (gameState) => {
     if (currentScreen == "home") return;
-    //console.log("....save to hist....", gameState);
+    console.log("....save to hist....", gameState);
     setGameHistory((prevHistory) => {
-      //console.log("prevHist:", prevHistory);
+      console.log("prevHist:", prevHistory);
       const existingIndex = prevHistory.findIndex(
         (game) => game.gameId === gameState.gameId
       );
@@ -79,21 +72,34 @@ export const GameHistoryProvider = ({ children }) => {
 
   // Delete a specific game by ID
   const deleteGameFromHistory = (gameId) => {
-    // Your logic for deleting a game
     console.debug("Deleting game:", gameId);
 
+    // Log the current gameHistory
+    console.debug("Current game history:", gameHistory);
+
+    // Check if the game exists in the history
     const game = gameHistory.find((g) => g.gameId === gameId);
     if (!game) {
       console.error("Game not found!");
       return;
     }
 
-    // Save completed game to statistics before deleting
+    // Save completed game to statistics
     saveCompletedGame(gameId, game.gameDifficulty, game.elapsedTime);
 
-    // Remove game from history
-    const updatedHistory = gameHistory.filter((g) => g.gameId !== gameId);
+    // Filter the game out of history and log the operation
+    const updatedHistory = gameHistory.filter((g) => {
+      const shouldKeep = g.gameId !== gameId;
+      console.debug(`Filtering gameId: ${g.gameId}, shouldKeep: ${shouldKeep}`);
+      return shouldKeep;
+    });
+
+    // Log the updated history
+    console.debug("Updated game history after filtering:", updatedHistory);
+
+    // Update both state and localStorage
     setGameHistory(updatedHistory);
+    localStorage.setItem("sudokuHistory", JSON.stringify(updatedHistory));
   };
 
   return (
